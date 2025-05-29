@@ -15,6 +15,7 @@ const Index = () => {
   const [selectedIndicator, setSelectedIndicator] = useState('population');
   const [currentLevel, setCurrentLevel] = useState('country'); // country -> state -> district -> block
   const [summaryScrolled, setSummaryScrolled] = useState(false);
+  const [summaryFocused, setSummaryFocused] = useState(false);
   const [tooltipData, setTooltipData] = useState(null);
   const mapRef = useRef(null);
 
@@ -28,7 +29,7 @@ const Index = () => {
     { id: 'infrastructure', name: 'Infrastructure Score', value: '44.1', color: 'bg-indigo-500', trend: '+4.1%' }
   ];
 
-  const handleRegionClick = (region) => {
+  const handleRegionClick = (region: any) => {
     setSelectedRegion(region);
     // Logic to drill down to next level
     if (currentLevel === 'country') {
@@ -40,7 +41,7 @@ const Index = () => {
     }
   };
 
-  const handleRegionHover = (region, event) => {
+  const handleRegionHover = (region: any, event?: any) => {
     setHoveredRegion(region);
     if (region && event) {
       setTooltipData({
@@ -53,25 +54,42 @@ const Index = () => {
     }
   };
 
+  const handleSummaryScroll = (scrolled: boolean) => {
+    setSummaryScrolled(scrolled);
+  };
+
+  const handleSummaryFocus = (focused: boolean) => {
+    setSummaryFocused(focused);
+  };
+
+  // Calculate dynamic widths based on summary focus
+  const summaryWidth = summaryFocused ? 'w-3/10' : 'w-1/5';
+  const mapWidth = summaryFocused ? 'w-7/10' : 'w-4/5';
+  const mapHeight = summaryFocused ? 'h-3/5' : 'h-5/8';
+  const indicatorHeight = summaryFocused ? 'h-2/5' : 'h-3/8';
+
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
       <Navbar />
       
       {/* Main Content */}
       <div className="flex h-screen pt-16">
-        {/* Summary Panel - Left Side (20%) */}
-        <SummaryPanel 
-          selectedIndicator={selectedIndicator}
-          selectedRegion={selectedRegion}
-          currentLevel={currentLevel}
-          onScroll={setSummaryScrolled}
-          className="w-1/5 z-40"
-        />
+        {/* Summary Panel - Left Side (Dynamic width) */}
+        <div className={`${summaryWidth} transition-all duration-300 relative z-50`}>
+          <SummaryPanel 
+            selectedIndicator={selectedIndicator}
+            selectedRegion={selectedRegion}
+            currentLevel={currentLevel}
+            onScroll={handleSummaryScroll}
+            onFocus={handleSummaryFocus}
+            className="h-full"
+          />
+        </div>
 
-        {/* Map and Indicators - Right Side (80%) */}
-        <div className="flex-1 flex flex-col relative">
-          {/* Map Area (65-75% of right side) */}
-          <div className={`flex-1 relative transition-all duration-300 ${summaryScrolled ? 'blur-sm' : ''}`}>
+        {/* Map and Indicators - Right Side (Dynamic width) */}
+        <div className={`${mapWidth} flex flex-col relative transition-all duration-300`}>
+          {/* Map Area (5:3 ratio with indicators) */}
+          <div className={`${mapHeight} relative transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
             <InteractiveMap
               ref={mapRef}
               currentLevel={currentLevel}
@@ -98,14 +116,14 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Indicator Panel - Bottom (25-35%) */}
-          <div className={`transition-all duration-300 ${summaryScrolled ? 'blur-sm' : ''}`}>
+          {/* Indicator Panel - Bottom (3:5 ratio with map) */}
+          <div className={`${indicatorHeight} transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
             <IndicatorPanel
               indicators={indicators}
               selectedIndicator={selectedIndicator}
               onIndicatorSelect={setSelectedIndicator}
               selectedRegion={selectedRegion}
-              className="h-80"
+              className="h-full"
             />
           </div>
         </div>
