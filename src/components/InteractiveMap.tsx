@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, forwardRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InteractiveMapProps {
@@ -12,7 +12,7 @@ interface InteractiveMapProps {
   className?: string;
 }
 
-export const InteractiveMap = forwardRef<HTMLDivElement, InteractiveMapProps>(({
+export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   currentLevel,
   selectedRegion,
   hoveredRegion,
@@ -20,14 +20,13 @@ export const InteractiveMap = forwardRef<HTMLDivElement, InteractiveMapProps>(({
   onRegionClick,
   onRegionHover,
   className
-}, ref) => {
+}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    // Using a free map alternative - OpenStreetMap with Leaflet-style implementation
-    // For now, we'll create a mock interactive map with SVG
+    // Mock data for Indian states
     const mockStates = [
       { name: 'Maharashtra', x: 300, y: 400, population: '112M', literacy: '82.3%' },
       { name: 'Uttar Pradesh', x: 350, y: 200, population: '199M', literacy: '67.7%' },
@@ -40,9 +39,7 @@ export const InteractiveMap = forwardRef<HTMLDivElement, InteractiveMapProps>(({
     ];
 
     // Clear previous content
-    if (mapContainer.current) {
-      mapContainer.current.innerHTML = '';
-    }
+    mapContainer.current.innerHTML = '';
 
     // Create SVG map
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -137,6 +134,4 @@ export const InteractiveMap = forwardRef<HTMLDivElement, InteractiveMapProps>(({
       </div>
     </div>
   );
-});
-
-InteractiveMap.displayName = 'InteractiveMap';
+};

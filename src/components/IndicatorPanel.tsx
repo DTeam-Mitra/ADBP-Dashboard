@@ -13,7 +13,7 @@ export const IndicatorPanel = ({
   className 
 }) => {
   return (
-    <div className={cn("bg-white border-t border-gray-200 p-6", className)}>
+    <div className={cn("bg-white border-t border-gray-200 p-6 w-full", className)}>
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900 mb-2">Key Indicators</h2>
         <p className="text-sm text-gray-600">
@@ -21,13 +21,13 @@ export const IndicatorPanel = ({
         </p>
       </div>
 
-      {/* Indicators Grid - 5-6 per row */}
-      <div className="grid grid-cols-6 gap-4">
+      {/* Indicators Grid - Full Width, 6 per row */}
+      <div className="grid grid-cols-6 gap-4 w-full">
         {indicators.map((indicator) => (
           <Card
             key={indicator.id}
             className={cn(
-              "p-4 cursor-pointer transition-all duration-200 hover:shadow-md",
+              "p-4 cursor-pointer transition-all duration-200 hover:shadow-md w-full",
               selectedIndicator === indicator.id 
                 ? "ring-2 ring-blue-500 bg-blue-50" 
                 : "hover:bg-gray-50"

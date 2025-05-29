@@ -13,11 +13,10 @@ const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [selectedIndicator, setSelectedIndicator] = useState('population');
-  const [currentLevel, setCurrentLevel] = useState('country'); // country -> state -> district -> block
+  const [currentLevel, setCurrentLevel] = useState('country');
   const [summaryScrolled, setSummaryScrolled] = useState(false);
   const [summaryFocused, setSummaryFocused] = useState(false);
   const [tooltipData, setTooltipData] = useState(null);
-  const mapRef = useRef(null);
 
   // Sample data for different regions and indicators
   const indicators = [
@@ -31,7 +30,6 @@ const Index = () => {
 
   const handleRegionClick = (region: any) => {
     setSelectedRegion(region);
-    // Logic to drill down to next level
     if (currentLevel === 'country') {
       setCurrentLevel('state');
     } else if (currentLevel === 'state') {
@@ -65,8 +63,8 @@ const Index = () => {
   // Calculate dynamic widths based on summary focus
   const summaryWidth = summaryFocused ? 'w-3/10' : 'w-1/5';
   const mapWidth = summaryFocused ? 'w-7/10' : 'w-4/5';
-  const mapHeight = summaryFocused ? 'h-3/5' : 'h-5/8';
-  const indicatorHeight = summaryFocused ? 'h-2/5' : 'h-3/8';
+  const mapHeight = 'h-5/8';
+  const indicatorHeight = 'h-3/8';
 
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
@@ -74,8 +72,8 @@ const Index = () => {
       
       {/* Main Content */}
       <div className="flex h-screen pt-16">
-        {/* Summary Panel - Left Side (Dynamic width) */}
-        <div className={`${summaryWidth} transition-all duration-300 relative z-50`}>
+        {/* Summary Panel - Left Side (Dynamic width and z-index) */}
+        <div className={`${summaryWidth} transition-all duration-300 relative ${summaryScrolled || summaryFocused ? 'z-40' : 'z-10'}`}>
           <SummaryPanel 
             selectedIndicator={selectedIndicator}
             selectedRegion={selectedRegion}
@@ -89,9 +87,8 @@ const Index = () => {
         {/* Map and Indicators - Right Side (Dynamic width) */}
         <div className={`${mapWidth} flex flex-col relative transition-all duration-300`}>
           {/* Map Area (5:3 ratio with indicators) */}
-          <div className={`${mapHeight} relative transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
+          <div className={`${mapHeight} relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
             <InteractiveMap
-              ref={mapRef}
               currentLevel={currentLevel}
               selectedRegion={selectedRegion}
               hoveredRegion={hoveredRegion}
@@ -116,14 +113,14 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Indicator Panel - Bottom (3:5 ratio with map) */}
-          <div className={`${indicatorHeight} transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
+          {/* Indicator Panel - Bottom (3:5 ratio with map) - Full Width */}
+          <div className={`${indicatorHeight} transition-all duration-300 z-30 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
             <IndicatorPanel
               indicators={indicators}
               selectedIndicator={selectedIndicator}
               onIndicatorSelect={setSelectedIndicator}
               selectedRegion={selectedRegion}
-              className="h-full"
+              className="h-full w-full"
             />
           </div>
         </div>
