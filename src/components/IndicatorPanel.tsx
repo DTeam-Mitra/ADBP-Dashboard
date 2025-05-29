@@ -5,15 +5,25 @@ import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export const IndicatorPanel = ({ 
+interface IndicatorPanelProps {
+  indicators: any[];
+  selectedIndicator: string;
+  onIndicatorSelect: (id: string) => void;
+  selectedRegion: any;
+  className?: string;
+  vertical?: boolean;
+}
+
+export const IndicatorPanel: React.FC<IndicatorPanelProps> = ({ 
   indicators, 
   selectedIndicator, 
   onIndicatorSelect, 
   selectedRegion,
-  className 
+  className,
+  vertical = false
 }) => {
   return (
-    <div className={cn("bg-white border-t border-gray-200 p-6 w-full", className)}>
+    <div className={cn("bg-white border border-gray-200 p-4 w-full", className)}>
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900 mb-2">Key Indicators</h2>
         <p className="text-sm text-gray-600">
@@ -21,20 +31,26 @@ export const IndicatorPanel = ({
         </p>
       </div>
 
-      {/* Indicators Grid - Full Width, 6 per row */}
-      <div className="grid grid-cols-6 gap-4 w-full">
+      {/* Indicators Layout */}
+      <div className={cn(
+        "gap-3 w-full",
+        vertical 
+          ? "flex flex-col space-y-3" 
+          : "grid grid-cols-6 gap-4"
+      )}>
         {indicators.map((indicator) => (
           <Card
             key={indicator.id}
             className={cn(
-              "p-4 cursor-pointer transition-all duration-200 hover:shadow-md w-full",
+              "p-3 cursor-pointer transition-all duration-200 hover:shadow-md w-full",
               selectedIndicator === indicator.id 
                 ? "ring-2 ring-blue-500 bg-blue-50" 
-                : "hover:bg-gray-50"
+                : "hover:bg-gray-50",
+              vertical ? "min-h-[100px]" : ""
             )}
             onClick={() => onIndicatorSelect(indicator.id)}
           >
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex items-start justify-between mb-2">
               <div className={cn("w-3 h-3 rounded-full", indicator.color)}></div>
               <BarChart3 className="w-4 h-4 text-gray-400" />
             </div>

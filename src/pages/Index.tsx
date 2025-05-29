@@ -60,20 +60,28 @@ const Index = () => {
     setSummaryFocused(focused);
   };
 
-  // Calculate dynamic widths based on summary focus
-  const summaryWidth = summaryFocused ? 'w-3/10' : 'w-1/5';
-  const mapWidth = summaryFocused ? 'w-7/10' : 'w-4/5';
-  const mapHeight = 'h-5/8';
-  const indicatorHeight = 'h-3/8';
-
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Fixed Navbar at top */}
       <Navbar />
       
-      {/* Main Content */}
-      <div className="flex h-screen pt-16">
-        {/* Summary Panel - Left Side (Dynamic width and z-index) */}
-        <div className={`${summaryWidth} transition-all duration-300 relative ${summaryScrolled || summaryFocused ? 'z-40' : 'z-10'}`}>
+      {/* Main Layout Grid */}
+      <div className="grid grid-cols-12 grid-rows-12 h-screen pt-16 gap-2 p-2">
+        
+        {/* Left Side - Indicators Panel (Vertical) */}
+        <div className="col-span-2 row-span-12 relative z-10">
+          <IndicatorPanel
+            indicators={indicators}
+            selectedIndicator={selectedIndicator}
+            onIndicatorSelect={setSelectedIndicator}
+            selectedRegion={selectedRegion}
+            className="h-full w-full flex flex-col"
+            vertical={true}
+          />
+        </div>
+
+        {/* Top Right - Summary Panel */}
+        <div className={`col-span-10 row-span-4 relative transition-all duration-300 ${summaryScrolled || summaryFocused ? 'z-40' : 'z-20'}`}>
           <SummaryPanel 
             selectedIndicator={selectedIndicator}
             selectedRegion={selectedRegion}
@@ -84,45 +92,65 @@ const Index = () => {
           />
         </div>
 
-        {/* Map and Indicators - Right Side (Dynamic width) */}
-        <div className={`${mapWidth} flex flex-col relative transition-all duration-300`}>
-          {/* Map Area (5:3 ratio with indicators) */}
-          <div className={`${mapHeight} relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
-            <InteractiveMap
-              currentLevel={currentLevel}
-              selectedRegion={selectedRegion}
-              hoveredRegion={hoveredRegion}
-              selectedIndicator={selectedIndicator}
-              onRegionClick={handleRegionClick}
-              onRegionHover={handleRegionHover}
-              className="w-full h-full"
-            />
-            
-            {/* Map Overlay Info */}
-            <div className="absolute top-4 right-4 z-30">
-              <Card className="p-3 bg-white/90 backdrop-blur-sm">
-                <div className="text-sm font-medium text-gray-700">
-                  Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
+        {/* Main Center - Map */}
+        <div className={`col-span-7 row-span-8 relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
+          <InteractiveMap
+            currentLevel={currentLevel}
+            selectedRegion={selectedRegion}
+            hoveredRegion={hoveredRegion}
+            selectedIndicator={selectedIndicator}
+            onRegionClick={handleRegionClick}
+            onRegionHover={handleRegionHover}
+            className="w-full h-full"
+          />
+          
+          {/* Map Overlay Info */}
+          <div className="absolute top-4 right-4 z-30">
+            <Card className="p-3 bg-white/90 backdrop-blur-sm">
+              <div className="text-sm font-medium text-gray-700">
+                Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
+              </div>
+              {selectedRegion && (
+                <div className="text-xs text-gray-500 mt-1">
+                  {selectedRegion.name}
                 </div>
-                {selectedRegion && (
-                  <div className="text-xs text-gray-500 mt-1">
-                    {selectedRegion.name}
-                  </div>
-                )}
-              </Card>
-            </div>
+              )}
+            </Card>
           </div>
+        </div>
 
-          {/* Indicator Panel - Bottom (3:5 ratio with map) - Full Width */}
-          <div className={`${indicatorHeight} transition-all duration-300 z-30 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
-            <IndicatorPanel
-              indicators={indicators}
-              selectedIndicator={selectedIndicator}
-              onIndicatorSelect={setSelectedIndicator}
-              selectedRegion={selectedRegion}
-              className="h-full w-full"
-            />
-          </div>
+        {/* Bottom Right - NavBar/Control Panel */}
+        <div className="col-span-3 row-span-8 relative z-10">
+          <Card className="h-full p-4 bg-white">
+            <h3 className="font-semibold text-gray-900 mb-4">Navigation Controls</h3>
+            <div className="space-y-3">
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-sm font-medium text-gray-700 mb-1">Current Level</div>
+                <Badge variant="outline">{currentLevel}</Badge>
+              </div>
+              
+              {selectedRegion && (
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <div className="text-sm font-medium text-gray-700 mb-1">Selected Region</div>
+                  <div className="text-sm text-gray-600">{selectedRegion.name}</div>
+                </div>
+              )}
+              
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-sm font-medium text-gray-700 mb-1">Selected Indicator</div>
+                <div className="text-sm text-gray-600">
+                  {indicators.find(i => i.id === selectedIndicator)?.name}
+                </div>
+              </div>
+              
+              <div className="mt-6 space-y-2">
+                <div className="text-xs text-gray-500 font-medium">Instructions:</div>
+                <div className="text-xs text-gray-600">• Click on map markers to drill down</div>
+                <div className="text-xs text-gray-600">• Hover for quick stats</div>
+                <div className="text-xs text-gray-600">• Select indicators from left panel</div>
+              </div>
+            </div>
+          </Card>
         </div>
       </div>
 
