@@ -68,20 +68,8 @@ const Index = () => {
       {/* Main Layout Grid */}
       <div className="grid grid-cols-12 grid-rows-12 h-screen pt-16 gap-2 p-2">
         
-        {/* Left Side - Indicators Panel (Vertical) */}
-        <div className="col-span-2 row-span-12 relative z-10">
-          <IndicatorPanel
-            indicators={indicators}
-            selectedIndicator={selectedIndicator}
-            onIndicatorSelect={setSelectedIndicator}
-            selectedRegion={selectedRegion}
-            className="h-full w-full flex flex-col"
-            vertical={true}
-          />
-        </div>
-
-        {/* Top Right - Summary Panel */}
-        <div className={`col-span-10 row-span-4 relative transition-all duration-300 ${summaryScrolled || summaryFocused ? 'z-40' : 'z-20'}`}>
+        {/* Left Side - Summary Panel (Vertical) */}
+        <div className={`col-span-3 row-span-8 relative transition-all duration-300 ${summaryScrolled || summaryFocused ? 'z-40' : 'z-10'}`}>
           <SummaryPanel 
             selectedIndicator={selectedIndicator}
             selectedRegion={selectedRegion}
@@ -92,8 +80,20 @@ const Index = () => {
           />
         </div>
 
-        {/* Main Center - Map */}
-        <div className={`col-span-7 row-span-8 relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
+        {/* Bottom Left - Indicators Panel */}
+        <div className={`col-span-3 row-span-4 relative z-20 transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
+          <IndicatorPanel
+            indicators={indicators}
+            selectedIndicator={selectedIndicator}
+            onIndicatorSelect={setSelectedIndicator}
+            selectedRegion={selectedRegion}
+            className="h-full w-full flex flex-col"
+            vertical={false}
+          />
+        </div>
+
+        {/* Main Right Area - Map */}
+        <div className={`col-span-9 row-span-12 relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
           <InteractiveMap
             currentLevel={currentLevel}
             selectedRegion={selectedRegion}
@@ -117,40 +117,33 @@ const Index = () => {
               )}
             </Card>
           </div>
-        </div>
 
-        {/* Bottom Right - NavBar/Control Panel */}
-        <div className="col-span-3 row-span-8 relative z-10">
-          <Card className="h-full p-4 bg-white">
-            <h3 className="font-semibold text-gray-900 mb-4">Navigation Controls</h3>
-            <div className="space-y-3">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <div className="text-sm font-medium text-gray-700 mb-1">Current Level</div>
-                <Badge variant="outline">{currentLevel}</Badge>
-              </div>
-              
-              {selectedRegion && (
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <div className="text-sm font-medium text-gray-700 mb-1">Selected Region</div>
-                  <div className="text-sm text-gray-600">{selectedRegion.name}</div>
+          {/* Navigation Controls Overlay */}
+          <div className="absolute bottom-4 right-4 z-30">
+            <Card className="p-4 bg-white/90 backdrop-blur-sm">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Navigation</h3>
+              <div className="space-y-2">
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="text-xs font-medium text-gray-700 mb-1">Level</div>
+                  <Badge variant="outline" className="text-xs">{currentLevel}</Badge>
                 </div>
-              )}
-              
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <div className="text-sm font-medium text-gray-700 mb-1">Selected Indicator</div>
-                <div className="text-sm text-gray-600">
-                  {indicators.find(i => i.id === selectedIndicator)?.name}
+                
+                {selectedRegion && (
+                  <div className="p-2 bg-gray-50 rounded-lg">
+                    <div className="text-xs font-medium text-gray-700 mb-1">Region</div>
+                    <div className="text-xs text-gray-600">{selectedRegion.name}</div>
+                  </div>
+                )}
+                
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="text-xs font-medium text-gray-700 mb-1">Indicator</div>
+                  <div className="text-xs text-gray-600">
+                    {indicators.find(i => i.id === selectedIndicator)?.name}
+                  </div>
                 </div>
               </div>
-              
-              <div className="mt-6 space-y-2">
-                <div className="text-xs text-gray-500 font-medium">Instructions:</div>
-                <div className="text-xs text-gray-600">• Click on map markers to drill down</div>
-                <div className="text-xs text-gray-600">• Hover for quick stats</div>
-                <div className="text-xs text-gray-600">• Select indicators from left panel</div>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
       </div>
 
