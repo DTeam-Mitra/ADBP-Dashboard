@@ -2,7 +2,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Send } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { IndicatorPanel } from '@/components/IndicatorPanel';
@@ -14,18 +16,15 @@ const Index = () => {
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [selectedIndicator, setSelectedIndicator] = useState('population');
   const [currentLevel, setCurrentLevel] = useState('country');
-  const [summaryScrolled, setSummaryScrolled] = useState(false);
-  const [summaryFocused, setSummaryFocused] = useState(false);
   const [tooltipData, setTooltipData] = useState(null);
+  const [activeTab, setActiveTab] = useState('charts');
 
   // Sample data for different regions and indicators
   const indicators = [
-    { id: 'population', name: 'Population', value: '1.38B', color: 'bg-blue-500', trend: '+1.2%' },
-    { id: 'literacy', name: 'Literacy Rate', value: '77.7%', color: 'bg-green-500', trend: '+2.1%' },
-    { id: 'gdp', name: 'GDP Growth', value: '6.8%', color: 'bg-purple-500', trend: '+0.5%' },
-    { id: 'healthcare', name: 'Healthcare Index', value: '41.2', color: 'bg-red-500', trend: '+3.2%' },
-    { id: 'employment', name: 'Employment Rate', value: '46.8%', color: 'bg-orange-500', trend: '-0.8%' },
-    { id: 'infrastructure', name: 'Infrastructure Score', value: '44.1', color: 'bg-indigo-500', trend: '+4.1%' }
+    { id: 'population', name: 'Pradhan Mantri Kisan Samman Nidhi', value: '98%', color: 'bg-blue-500', trend: '+1.2%', achievement: '98%' },
+    { id: 'literacy', name: 'Pradhan Mantri Jan Arogya Yojana', value: '98%', color: 'bg-green-500', trend: '+2.1%', achievement: '98%' },
+    { id: 'gdp', name: 'Mahila Samriddhi Yojana', value: '98%', color: 'bg-purple-500', trend: '+0.5%', achievement: '98%' },
+    { id: 'healthcare', name: 'Mukhyamantri Yuva Karya Prashikshan Yojana', value: '98%', color: 'bg-red-500', trend: '+3.2%', achievement: '98%' }
   ];
 
   const handleRegionClick = (region: any) => {
@@ -52,97 +51,127 @@ const Index = () => {
     }
   };
 
-  const handleSummaryScroll = (scrolled: boolean) => {
-    setSummaryScrolled(scrolled);
-  };
-
-  const handleSummaryFocus = (focused: boolean) => {
-    setSummaryFocused(focused);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
       {/* Fixed Navbar at top */}
       <Navbar />
       
-      {/* Main Layout Grid */}
-      <div className="grid grid-cols-12 grid-rows-12 h-screen pt-16 gap-2 p-2">
+      {/* Main Layout */}
+      <div className="pt-16 h-screen flex flex-col">
         
-        {/* Left Side - Summary Panel (Vertical) */}
-        <div className={`col-span-3 row-span-8 relative transition-all duration-300 ${summaryScrolled || summaryFocused ? 'z-40' : 'z-10'}`}>
-          <SummaryPanel 
-            selectedIndicator={selectedIndicator}
-            selectedRegion={selectedRegion}
-            currentLevel={currentLevel}
-            onScroll={handleSummaryScroll}
-            onFocus={handleSummaryFocus}
-            className="h-full"
-          />
-        </div>
-
-        {/* Bottom Left - Indicators Panel */}
-        <div className={`col-span-3 row-span-4 relative z-20 transition-all duration-300 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
-          <IndicatorPanel
-            indicators={indicators}
-            selectedIndicator={selectedIndicator}
-            onIndicatorSelect={setSelectedIndicator}
-            selectedRegion={selectedRegion}
-            className="h-full w-full flex flex-col"
-            vertical={false}
-          />
-        </div>
-
-        {/* Main Right Area - Map */}
-        <div className={`col-span-9 row-span-12 relative transition-all duration-300 z-20 ${summaryScrolled && !summaryFocused ? 'blur-sm' : ''}`}>
-          <InteractiveMap
-            currentLevel={currentLevel}
-            selectedRegion={selectedRegion}
-            hoveredRegion={hoveredRegion}
-            selectedIndicator={selectedIndicator}
-            onRegionClick={handleRegionClick}
-            onRegionHover={handleRegionHover}
-            className="w-full h-full"
-          />
-          
-          {/* Map Overlay Info */}
-          <div className="absolute top-4 right-4 z-30">
-            <Card className="p-3 bg-white/90 backdrop-blur-sm">
-              <div className="text-sm font-medium text-gray-700">
-                Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
-              </div>
-              {selectedRegion && (
-                <div className="text-xs text-gray-500 mt-1">
-                  {selectedRegion.name}
-                </div>
-              )}
-            </Card>
-          </div>
-
-          {/* Navigation Controls Overlay */}
-          <div className="absolute bottom-4 right-4 z-30">
-            <Card className="p-4 bg-white/90 backdrop-blur-sm">
-              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Navigation</h3>
-              <div className="space-y-2">
-                <div className="p-2 bg-gray-50 rounded-lg">
-                  <div className="text-xs font-medium text-gray-700 mb-1">Level</div>
-                  <Badge variant="outline" className="text-xs">{currentLevel}</Badge>
-                </div>
-                
-                {selectedRegion && (
-                  <div className="p-2 bg-gray-50 rounded-lg">
-                    <div className="text-xs font-medium text-gray-700 mb-1">Region</div>
-                    <div className="text-xs text-gray-600">{selectedRegion.name}</div>
+        {/* Tabs Section */}
+        <div className="px-4 py-2 bg-white border-b">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="h-10">
+              <TabsTrigger value="charts" className="px-6">Charts</TabsTrigger>
+              <TabsTrigger value="summary" className="px-6">Summary</TabsTrigger>
+            </TabsList>
+            
+            {/* Tab Content Area */}
+            <div className="mt-4">
+              <TabsContent value="charts" className="h-[60vh] m-0">
+                <div className="grid grid-cols-12 h-full gap-4">
+                  {/* Left Chat Area */}
+                  <div className="col-span-3 flex flex-col">
+                    <div className="flex-1 bg-white rounded-lg border p-4 mb-4">
+                      {/* Map content or other chart content */}
+                      <InteractiveMap
+                        currentLevel={currentLevel}
+                        selectedRegion={selectedRegion}
+                        hoveredRegion={hoveredRegion}
+                        selectedIndicator={selectedIndicator}
+                        onRegionClick={handleRegionClick}
+                        onRegionHover={handleRegionHover}
+                        className="w-full h-full"
+                      />
+                    </div>
+                    
+                    {/* Chat Interface */}
+                    <Card className="p-4 h-20">
+                      <div className="flex items-center space-x-2">
+                        <input 
+                          type="text" 
+                          placeholder="Chat with me Here"
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <Button size="sm" className="px-3">
+                          <Send className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </Card>
                   </div>
-                )}
-                
-                <div className="p-2 bg-gray-50 rounded-lg">
-                  <div className="text-xs font-medium text-gray-700 mb-1">Indicator</div>
-                  <div className="text-xs text-gray-600">
-                    {indicators.find(i => i.id === selectedIndicator)?.name}
+                  
+                  {/* Main Map Area */}
+                  <div className="col-span-9 bg-white rounded-lg border relative">
+                    <InteractiveMap
+                      currentLevel={currentLevel}
+                      selectedRegion={selectedRegion}
+                      hoveredRegion={hoveredRegion}
+                      selectedIndicator={selectedIndicator}
+                      onRegionClick={handleRegionClick}
+                      onRegionHover={handleRegionHover}
+                      className="w-full h-full"
+                    />
+                    
+                    {/* Map Overlay Info */}
+                    <div className="absolute top-4 right-4 z-30">
+                      <Card className="p-3 bg-white/90 backdrop-blur-sm">
+                        <div className="text-sm font-medium text-gray-700">
+                          Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
+                        </div>
+                        {selectedRegion && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {selectedRegion.name}
+                          </div>
+                        )}
+                      </Card>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
+              </TabsContent>
+              
+              <TabsContent value="summary" className="h-[60vh] m-0">
+                <SummaryPanel 
+                  selectedIndicator={selectedIndicator}
+                  selectedRegion={selectedRegion}
+                  currentLevel={currentLevel}
+                  onScroll={() => {}}
+                  onFocus={() => {}}
+                  className="h-full"
+                />
+              </TabsContent>
+            </div>
+          </Tabs>
+        </div>
+
+        {/* Bottom Schemes Section */}
+        <div className="flex-1 bg-white border-t p-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Schemes</h2>
+          <div className="grid grid-cols-4 gap-4">
+            {indicators.map((scheme) => (
+              <Card
+                key={scheme.id}
+                className={`p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  selectedIndicator === scheme.id 
+                    ? "ring-2 ring-blue-500 bg-blue-50" 
+                    : "hover:bg-gray-50"
+                }`}
+                onClick={() => setSelectedIndicator(scheme.id)}
+              >
+                <div className="space-y-2">
+                  <h3 className="font-medium text-gray-900 text-sm leading-tight">
+                    {scheme.name}
+                  </h3>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-600">Target Achievement</span>
+                    <Badge variant="outline" className="text-xs">
+                      {scheme.achievement}
+                    </Badge>
+                  </div>
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </div>

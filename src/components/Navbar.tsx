@@ -8,10 +8,7 @@ export const Navbar = () => {
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">ID</span>
-            </div>
-            <h1 className="text-xl font-bold text-gray-900">India Dashboard</h1>
+            <h1 className="text-xl font-bold text-gray-900">MITRA Dashboard</h1>
           </div>
           
           <div className="flex items-center space-x-4">
