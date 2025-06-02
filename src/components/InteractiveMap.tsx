@@ -9,6 +9,7 @@ interface InteractiveMapProps {
   selectedIndicator: string;
   onRegionClick: (region: any) => void;
   onRegionHover: (region: any, event?: any) => void;
+  activeLayer?: string;
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   selectedIndicator,
   onRegionClick,
   onRegionHover,
+  activeLayer = 'default',
   className
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -46,14 +48,31 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
     svg.setAttribute('width', '100%');
     svg.setAttribute('height', '100%');
     svg.setAttribute('viewBox', '0 0 600 700');
-    svg.style.background = '#f8fafc';
+    
+    // Change background based on active layer
+    const backgroundColors = {
+      default: '#f8fafc',
+      satellite: '#2d3748',
+      terrain: '#2f855a'
+    };
+    svg.style.background = backgroundColors[activeLayer as keyof typeof backgroundColors] || backgroundColors.default;
     svg.style.borderRadius = '12px';
 
     // Add India outline (simplified)
     const indiaOutline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     indiaOutline.setAttribute('d', 'M150,150 L450,150 L480,200 L470,300 L450,400 L400,500 L350,600 L300,650 L250,650 L200,600 L150,500 L120,400 L100,300 L110,200 Z');
-    indiaOutline.setAttribute('fill', '#e2e8f0');
-    indiaOutline.setAttribute('stroke', '#cbd5e1');
+    
+    // Adjust outline based on layer
+    if (activeLayer === 'satellite') {
+      indiaOutline.setAttribute('fill', '#4a5568');
+      indiaOutline.setAttribute('stroke', '#718096');
+    } else if (activeLayer === 'terrain') {
+      indiaOutline.setAttribute('fill', '#68d391');
+      indiaOutline.setAttribute('stroke', '#38a169');
+    } else {
+      indiaOutline.setAttribute('fill', '#e2e8f0');
+      indiaOutline.setAttribute('stroke', '#cbd5e1');
+    }
     indiaOutline.setAttribute('stroke-width', '2');
     svg.appendChild(indiaOutline);
 
@@ -92,7 +111,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
       text.setAttribute('x', (state.x + 15).toString());
       text.setAttribute('y', (state.y + 5).toString());
       text.setAttribute('font-size', '12');
-      text.setAttribute('fill', '#475569');
+      
+      // Adjust text color based on layer
+      if (activeLayer === 'satellite' || activeLayer === 'terrain') {
+        text.setAttribute('fill', '#ffffff');
+      } else {
+        text.setAttribute('fill', '#475569');
+      }
       text.setAttribute('font-weight', '500');
       text.textContent = state.name;
       svg.appendChild(text);
@@ -106,7 +131,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         mapContainer.current.innerHTML = '';
       }
     };
-  }, [selectedIndicator, onRegionClick, onRegionHover]);
+  }, [selectedIndicator, activeLayer, onRegionClick, onRegionHover]);
 
   const getMarkerColor = (indicator: string) => {
     const colors: Record<string, string> = {
@@ -125,11 +150,11 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
       <div ref={mapContainer} className="absolute inset-0 rounded-lg" />
       
       {/* Map Instructions */}
-      <div className="absolute bottom-4 left-4 z-30">
+      <div className="absolute bottom-4 right-4 z-30">
         <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 text-sm text-gray-600 shadow-lg">
           <div className="font-medium mb-1">Interactive Map</div>
-          <div>Click on markers to drill down</div>
-          <div>Hover for quick stats</div>
+          <div>Active Layer: {activeLayer.charAt(0).toUpperCase() + activeLayer.slice(1)}</div>
+          <div className="text-xs text-gray-500">Click markers to drill down</div>
         </div>
       </div>
     </div>

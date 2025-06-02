@@ -4,13 +4,13 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Send } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { SummaryPanel } from '@/components/SummaryPanel';
 import { MapTooltip } from '@/components/MapTooltip';
 import { ChatInterface } from '@/components/ChatInterface';
 import { SchemesList } from '@/components/SchemesList';
+import { MapLayerControls } from '@/components/MapLayerControls';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -19,6 +19,7 @@ const Index = () => {
   const [currentLevel, setCurrentLevel] = useState('country');
   const [tooltipData, setTooltipData] = useState(null);
   const [activeTab, setActiveTab] = useState('map');
+  const [activeMapLayer, setActiveMapLayer] = useState('default');
 
   // Sample data for schemes
   const schemes = [
@@ -77,85 +78,94 @@ const Index = () => {
       {/* Fixed Navbar */}
       <Navbar />
       
-      {/* Main Layout */}
-      <div className="pt-16 h-screen flex flex-col">
+      {/* Main Layout with Sidebar */}
+      <div className="pt-16 h-screen flex">
         
-        {/* Top Tabs Section */}
-        <div className="px-6 py-3 bg-white border-b">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex justify-center">
-              <TabsList className="h-10 bg-gray-100">
-                <TabsTrigger value="summary" className="px-8 py-2">Summary</TabsTrigger>
-                <TabsTrigger value="map" className="px-8 py-2">Map</TabsTrigger>
-              </TabsList>
-            </div>
-          </Tabs>
+        {/* Left Sidebar - Permanent Chatbot */}
+        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+          <div className="p-4 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">MITRA Assistant</h3>
+            <p className="text-sm text-gray-600">Ask me about the dashboard data</p>
+          </div>
+          <div className="flex-1">
+            <ChatInterface />
+          </div>
         </div>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           
-          {/* Content Based on Active Tab */}
-          <div className="flex-1 relative">
-            {activeTab === 'map' && (
-              <div className="absolute inset-0 p-4">
-                <div className="h-full relative">
-                  {/* Main Map Area */}
-                  <div className="h-full bg-white rounded-lg border relative">
-                    <InteractiveMap
-                      currentLevel={currentLevel}
-                      selectedRegion={selectedRegion}
-                      hoveredRegion={hoveredRegion}
-                      selectedIndicator={selectedIndicator}
-                      onRegionClick={handleRegionClick}
-                      onRegionHover={handleRegionHover}
-                      className="w-full h-full"
-                    />
-                    
-                    {/* Map Overlay Info */}
-                    <div className="absolute top-4 right-4 z-30">
-                      <Card className="p-3 bg-white/90 backdrop-blur-sm">
-                        <div className="text-sm font-medium text-gray-700">
-                          Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
-                        </div>
-                        {selectedRegion && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            {selectedRegion.name}
+          {/* Top Tabs Section */}
+          <div className="px-6 py-3 bg-white border-b">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="flex justify-center">
+                <TabsList className="h-10 bg-gray-100">
+                  <TabsTrigger value="summary" className="px-8 py-2">Summary</TabsTrigger>
+                  <TabsTrigger value="map" className="px-8 py-2">Map</TabsTrigger>
+                </TabsList>
+              </div>
+            </Tabs>
+          </div>
+
+          {/* Content Area with Right Controls */}
+          <div className="flex-1 flex">
+            
+            {/* Main Content */}
+            <div className="flex-1 relative">
+              {activeTab === 'map' && (
+                <div className="absolute inset-0 p-4">
+                  <div className="h-full relative">
+                    {/* Main Map Area */}
+                    <div className="h-full bg-white rounded-lg border relative">
+                      <InteractiveMap
+                        currentLevel={currentLevel}
+                        selectedRegion={selectedRegion}
+                        hoveredRegion={hoveredRegion}
+                        selectedIndicator={selectedIndicator}
+                        onRegionClick={handleRegionClick}
+                        onRegionHover={handleRegionHover}
+                        activeLayer={activeMapLayer}
+                        className="w-full h-full"
+                      />
+                      
+                      {/* Map Overlay Info */}
+                      <div className="absolute top-4 left-4 z-30">
+                        <Card className="p-3 bg-white/90 backdrop-blur-sm">
+                          <div className="text-sm font-medium text-gray-700">
+                            Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
                           </div>
-                        )}
-                      </Card>
-                    </div>
-
-                    {/* Chat Interface - Bottom Left */}
-                    <div className="absolute bottom-4 left-4 w-80 z-30">
-                      <ChatInterface />
-                    </div>
-
-                    {/* Vertical Selection Controls - Right Side */}
-                    <div className="absolute top-4 right-20 bottom-4 w-6 z-30">
-                      <div className="h-full flex flex-col justify-center space-y-2">
-                        {[...Array(20)].map((_, i) => (
-                          <div 
-                            key={i} 
-                            className="w-4 h-4 border border-gray-400 bg-white hover:bg-gray-100 cursor-pointer transition-colors"
-                          />
-                        ))}
+                          {selectedRegion && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {selectedRegion.name}
+                            </div>
+                          )}
+                        </Card>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {activeTab === 'summary' && (
-              <div className="absolute inset-0 p-4">
-                <SummaryPanel 
-                  selectedIndicator={selectedIndicator}
-                  selectedRegion={selectedRegion}
-                  currentLevel={currentLevel}
-                  onScroll={() => {}}
-                  onFocus={() => {}}
-                  className="h-full"
+              {activeTab === 'summary' && (
+                <div className="absolute inset-0 p-4">
+                  <SummaryPanel 
+                    selectedIndicator={selectedIndicator}
+                    selectedRegion={selectedRegion}
+                    currentLevel={currentLevel}
+                    onScroll={() => {}}
+                    onFocus={() => {}}
+                    className="h-full"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Right Sidebar - Map Layer Controls */}
+            {activeTab === 'map' && (
+              <div className="w-16 border-l border-gray-200 bg-white">
+                <MapLayerControls 
+                  activeLayer={activeMapLayer}
+                  onLayerChange={setActiveMapLayer}
                 />
               </div>
             )}
