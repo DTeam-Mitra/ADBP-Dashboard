@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
-import { IndicatorPanel } from '@/components/IndicatorPanel';
 import { SummaryPanel } from '@/components/SummaryPanel';
 import { MapTooltip } from '@/components/MapTooltip';
+import { ChatInterface } from '@/components/ChatInterface';
+import { SchemesList } from '@/components/SchemesList';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -17,14 +18,34 @@ const Index = () => {
   const [selectedIndicator, setSelectedIndicator] = useState('population');
   const [currentLevel, setCurrentLevel] = useState('country');
   const [tooltipData, setTooltipData] = useState(null);
-  const [activeTab, setActiveTab] = useState('charts');
+  const [activeTab, setActiveTab] = useState('map');
 
-  // Sample data for different regions and indicators
-  const indicators = [
-    { id: 'population', name: 'Pradhan Mantri Kisan Samman Nidhi', value: '98%', color: 'bg-blue-500', trend: '+1.2%', achievement: '98%' },
-    { id: 'literacy', name: 'Pradhan Mantri Jan Arogya Yojana', value: '98%', color: 'bg-green-500', trend: '+2.1%', achievement: '98%' },
-    { id: 'gdp', name: 'Mahila Samriddhi Yojana', value: '98%', color: 'bg-purple-500', trend: '+0.5%', achievement: '98%' },
-    { id: 'healthcare', name: 'Mukhyamantri Yuva Karya Prashikshan Yojana', value: '98%', color: 'bg-red-500', trend: '+3.2%', achievement: '98%' }
+  // Sample data for schemes
+  const schemes = [
+    { 
+      id: 'pm-kisan', 
+      name: 'Pradhan Mantri Kisan Samman Nidhi', 
+      achievement: '98%',
+      targetAchievement: '98%'
+    },
+    { 
+      id: 'pm-jan-arogya', 
+      name: 'Pradhan Mantri Jan Arogya Yojana', 
+      achievement: '98%',
+      targetAchievement: '98%'
+    },
+    { 
+      id: 'mahila-samriddhi', 
+      name: 'Mahila Samriddhi Yojana', 
+      achievement: '98%',
+      targetAchievement: '98%'
+    },
+    { 
+      id: 'yuva-karya', 
+      name: 'Mukhyamantri Yuva Karya Prashikshan Yojana', 
+      achievement: '98%',
+      targetAchievement: '98%'
+    }
   ];
 
   const handleRegionClick = (region: any) => {
@@ -53,56 +74,34 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Fixed Navbar at top */}
+      {/* Fixed Navbar */}
       <Navbar />
       
       {/* Main Layout */}
       <div className="pt-16 h-screen flex flex-col">
         
-        {/* Tabs Section */}
-        <div className="px-4 py-2 bg-white border-b">
+        {/* Top Tabs Section */}
+        <div className="px-6 py-3 bg-white border-b">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="h-10">
-              <TabsTrigger value="charts" className="px-6">Charts</TabsTrigger>
-              <TabsTrigger value="summary" className="px-6">Summary</TabsTrigger>
-            </TabsList>
-            
-            {/* Tab Content Area */}
-            <div className="mt-4">
-              <TabsContent value="charts" className="h-[60vh] m-0">
-                <div className="grid grid-cols-12 h-full gap-4">
-                  {/* Left Chat Area */}
-                  <div className="col-span-3 flex flex-col">
-                    <div className="flex-1 bg-white rounded-lg border p-4 mb-4">
-                      {/* Map content or other chart content */}
-                      <InteractiveMap
-                        currentLevel={currentLevel}
-                        selectedRegion={selectedRegion}
-                        hoveredRegion={hoveredRegion}
-                        selectedIndicator={selectedIndicator}
-                        onRegionClick={handleRegionClick}
-                        onRegionHover={handleRegionHover}
-                        className="w-full h-full"
-                      />
-                    </div>
-                    
-                    {/* Chat Interface */}
-                    <Card className="p-4 h-20">
-                      <div className="flex items-center space-x-2">
-                        <input 
-                          type="text" 
-                          placeholder="Chat with me Here"
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <Button size="sm" className="px-3">
-                          <Send className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </Card>
-                  </div>
-                  
+            <div className="flex justify-center">
+              <TabsList className="h-10 bg-gray-100">
+                <TabsTrigger value="summary" className="px-8 py-2">Summary</TabsTrigger>
+                <TabsTrigger value="map" className="px-8 py-2">Map</TabsTrigger>
+              </TabsList>
+            </div>
+          </Tabs>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col">
+          
+          {/* Content Based on Active Tab */}
+          <div className="flex-1 relative">
+            {activeTab === 'map' && (
+              <div className="absolute inset-0 p-4">
+                <div className="h-full relative">
                   {/* Main Map Area */}
-                  <div className="col-span-9 bg-white rounded-lg border relative">
+                  <div className="h-full bg-white rounded-lg border relative">
                     <InteractiveMap
                       currentLevel={currentLevel}
                       selectedRegion={selectedRegion}
@@ -126,11 +125,30 @@ const Index = () => {
                         )}
                       </Card>
                     </div>
+
+                    {/* Chat Interface - Bottom Left */}
+                    <div className="absolute bottom-4 left-4 w-80 z-30">
+                      <ChatInterface />
+                    </div>
+
+                    {/* Vertical Selection Controls - Right Side */}
+                    <div className="absolute top-4 right-20 bottom-4 w-6 z-30">
+                      <div className="h-full flex flex-col justify-center space-y-2">
+                        {[...Array(20)].map((_, i) => (
+                          <div 
+                            key={i} 
+                            className="w-4 h-4 border border-gray-400 bg-white hover:bg-gray-100 cursor-pointer transition-colors"
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="summary" className="h-[60vh] m-0">
+              </div>
+            )}
+
+            {activeTab === 'summary' && (
+              <div className="absolute inset-0 p-4">
                 <SummaryPanel 
                   selectedIndicator={selectedIndicator}
                   selectedRegion={selectedRegion}
@@ -139,39 +157,17 @@ const Index = () => {
                   onFocus={() => {}}
                   className="h-full"
                 />
-              </TabsContent>
-            </div>
-          </Tabs>
-        </div>
+              </div>
+            )}
+          </div>
 
-        {/* Bottom Schemes Section */}
-        <div className="flex-1 bg-white border-t p-4">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Schemes</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {indicators.map((scheme) => (
-              <Card
-                key={scheme.id}
-                className={`p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  selectedIndicator === scheme.id 
-                    ? "ring-2 ring-blue-500 bg-blue-50" 
-                    : "hover:bg-gray-50"
-                }`}
-                onClick={() => setSelectedIndicator(scheme.id)}
-              >
-                <div className="space-y-2">
-                  <h3 className="font-medium text-gray-900 text-sm leading-tight">
-                    {scheme.name}
-                  </h3>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">Target Achievement</span>
-                    <Badge variant="outline" className="text-xs">
-                      {scheme.achievement}
-                    </Badge>
-                  </div>
-                </div>
-              </Card>
-            ))}
+          {/* Bottom Schemes Section */}
+          <div className="bg-white border-t p-4">
+            <SchemesList 
+              schemes={schemes}
+              selectedScheme={selectedIndicator}
+              onSchemeSelect={setSelectedIndicator}
+            />
           </div>
         </div>
       </div>
