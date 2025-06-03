@@ -1,9 +1,10 @@
-
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { cn } from '@/lib/utils';
 
 interface InteractiveMapProps {
-  currentLevel: string;
+  currentLevel: 'village';
   selectedRegion: any;
   hoveredRegion: any;
   selectedIndicator: string;
@@ -24,137 +25,133 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   className
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const mapInstance = useRef<L.Map | null>(null);
+  const [geojsonData, setGeojsonData] = useState<any>(null);
+  const [geojsonLayer, setGeojsonLayer] = useState<L.GeoJSON<any> | null>(null);
+  const [zoomLevel, setZoomLevel] = useState<number>(6);
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    const container = mapContainer.current;
+    if (!container) return;
 
-    // Mock data for Indian states
-    const mockStates = [
-      { name: 'Maharashtra', x: 300, y: 400, population: '112M', literacy: '82.3%' },
-      { name: 'Uttar Pradesh', x: 350, y: 200, population: '199M', literacy: '67.7%' },
-      { name: 'Karnataka', x: 250, y: 500, population: '61M', literacy: '75.4%' },
-      { name: 'Tamil Nadu', x: 280, y: 600, population: '72M', literacy: '80.1%' },
-      { name: 'Gujarat', x: 150, y: 300, population: '60M', literacy: '78.0%' },
-      { name: 'West Bengal', x: 450, y: 250, population: '91M', literacy: '76.3%' },
-      { name: 'Rajasthan', x: 200, y: 250, population: '68M', literacy: '66.1%' },
-      { name: 'Madhya Pradesh', x: 280, y: 300, population: '73M', literacy: '69.3%' },
-    ];
+    const map = L.map(container, {
+      zoomControl: true,
+      attributionControl: false,
+      minZoom: 6,
+      maxZoom: 12
+    }).setView([19.7515, 75.7139], 6);
 
-    // Clear previous content
-    mapContainer.current.innerHTML = '';
+    mapInstance.current = map;
 
-    // Create SVG map
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
-    svg.setAttribute('viewBox', '0 0 600 700');
-    
-    // Change background based on active layer
-    const backgroundColors = {
-      default: '#f8fafc',
-      satellite: '#2d3748',
-      terrain: '#2f855a'
+    fetch('/mh1.geojson')
+      .then(res => {
+        if (!res.ok) throw new Error(`Network error: ${res.statusText}`);
+        return res.json();
+      })
+      .then(data => {
+        setGeojsonData(data);
+        updateMapByZoomLevel(map, data);
+        map.on('zoomend', () => {
+          setZoomLevel(map.getZoom());
+          updateMapByZoomLevel(map, data);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading mh1.geojson:', err);
+        alert('Failed to load map data. Please check the console for details.');
+      });
+
+    return () => {
+      map.remove();
     };
-    svg.style.background = backgroundColors[activeLayer as keyof typeof backgroundColors] || backgroundColors.default;
-    svg.style.borderRadius = '12px';
+  }, [currentLevel, selectedIndicator, activeLayer, onRegionClick, onRegionHover]);
 
-    // Add India outline (simplified)
-    const indiaOutline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    indiaOutline.setAttribute('d', 'M150,150 L450,150 L480,200 L470,300 L450,400 L400,500 L350,600 L300,650 L250,650 L200,600 L150,500 L120,400 L100,300 L110,200 Z');
-    
-    // Adjust outline based on layer
-    if (activeLayer === 'satellite') {
-      indiaOutline.setAttribute('fill', '#4a5568');
-      indiaOutline.setAttribute('stroke', '#718096');
-    } else if (activeLayer === 'terrain') {
-      indiaOutline.setAttribute('fill', '#68d391');
-      indiaOutline.setAttribute('stroke', '#38a169');
-    } else {
-      indiaOutline.setAttribute('fill', '#e2e8f0');
-      indiaOutline.setAttribute('stroke', '#cbd5e1');
+  useEffect(() => {
+    if (!geojsonLayer || !hoveredRegion || !mapInstance.current) return;
+    geojsonLayer.eachLayer(layer => {
+      const feature = (layer as any).feature;
+      const isHovered = hoveredRegion && feature?.properties?.ID === hoveredRegion.ID;
+      const isSelected = selectedRegion && feature?.properties?.ID === selectedRegion.ID;
+      (layer as L.Path).setStyle({
+        weight: isSelected ? 3 : isHovered ? 2 : 1,
+        fillOpacity: isSelected ? 0.7 : isHovered ? 0.6 : 0.5,
+        color: isSelected ? '#2563eb' : '#1f2937',
+        fillColor: '#34d399'
+      });
+    });
+  }, [hoveredRegion, selectedRegion, geojsonLayer]);
+
+  const updateMapByZoomLevel = (map: L.Map, data: any) => {
+    const zoom = map.getZoom();
+    if (!data) return;
+
+    if (geojsonLayer) {
+      geojsonLayer.remove();
     }
-    indiaOutline.setAttribute('stroke-width', '2');
-    svg.appendChild(indiaOutline);
 
-    // Add state markers
-    mockStates.forEach((state) => {
-      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('cx', state.x.toString());
-      circle.setAttribute('cy', state.y.toString());
-      circle.setAttribute('r', '8');
-      circle.setAttribute('fill', getMarkerColor(selectedIndicator));
-      circle.setAttribute('stroke', '#ffffff');
-      circle.setAttribute('stroke-width', '2');
-      circle.style.cursor = 'pointer';
-      circle.style.transition = 'all 0.2s ease';
-
-      // Add hover effects
-      circle.addEventListener('mouseenter', (e) => {
-        circle.setAttribute('r', '12');
-        onRegionHover(state, e);
-      });
-
-      circle.addEventListener('mouseleave', () => {
-        circle.setAttribute('r', '8');
-        onRegionHover(null);
-      });
-
-      // Add click handler
-      circle.addEventListener('click', () => {
-        onRegionClick(state);
-      });
-
-      svg.appendChild(circle);
-
-      // Add state labels
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', (state.x + 15).toString());
-      text.setAttribute('y', (state.y + 5).toString());
-      text.setAttribute('font-size', '12');
-      
-      // Adjust text color based on layer
-      if (activeLayer === 'satellite' || activeLayer === 'terrain') {
-        text.setAttribute('fill', '#ffffff');
-      } else {
-        text.setAttribute('fill', '#475569');
-      }
-      text.setAttribute('font-weight', '500');
-      text.textContent = state.name;
-      svg.appendChild(text);
+    const filteredFeatures = data.features.filter((feature: any) => {
+      if (zoom <= 6) return feature.properties.TYPE === 'district';
+      if (zoom > 6 && zoom <= 9) return feature.properties.TYPE === 'subdistrict';
+      return ['village', 'city', 'town'].includes(feature.properties.TYPE);
     });
 
-    mapContainer.current.appendChild(svg);
+    const filteredGeoJSON = { ...data, features: filteredFeatures };
 
-    // Cleanup function
-    return () => {
-      if (mapContainer.current) {
-        mapContainer.current.innerHTML = '';
+    const newLayer = L.geoJSON(filteredGeoJSON, {
+      style: feature => {
+        const isSelected = selectedRegion && selectedRegion.ID === feature.properties.ID;
+        return {
+          color: isSelected ? '#2563eb' : '#1f2937',
+          weight: isSelected ? 3 : 1,
+          fillColor: '#34d399',
+          fillOpacity: isSelected ? 0.7 : 0.5
+        };
+      },
+      onEachFeature: (feature, layer) => {
+        const name = feature.properties.NAME || 'Unknown';
+        const district = feature.properties.DISTRICT || 'Unknown';
+
+        layer.bindTooltip(`${name}, ${district}`, {
+          direction: 'center',
+          sticky: true
+        });
+
+        layer.on({
+          mouseover: (e: L.LeafletMouseEvent) => {
+            (layer as L.Path).setStyle({ weight: 2, fillOpacity: 0.7 });
+            onRegionHover(feature.properties, e);
+          },
+          mouseout: () => {
+            (layer as L.Path).setStyle({ weight: 1, fillOpacity: 0.5 });
+            onRegionHover(null);
+          },
+          click: () => {
+            onRegionClick(feature.properties);
+          }
+        });
       }
-    };
-  }, [selectedIndicator, activeLayer, onRegionClick, onRegionHover]);
+    }).addTo(map);
 
-  const getMarkerColor = (indicator: string) => {
-    const colors: Record<string, string> = {
-      population: '#3b82f6',
-      literacy: '#10b981',
-      gdp: '#8b5cf6',
-      healthcare: '#ef4444',
-      employment: '#f97316',
-      infrastructure: '#6366f1'
-    };
-    return colors[indicator] || '#3b82f6';
+    setGeojsonLayer(newLayer);
+    try {
+      if (newLayer.getBounds().isValid()) {
+        map.fitBounds(newLayer.getBounds());
+      }
+    } catch (e) {
+      console.warn('Invalid bounds:', e);
+    }
   };
 
   return (
     <div className={cn("relative w-full h-full", className)}>
       <div ref={mapContainer} className="absolute inset-0 rounded-lg" />
-      
-      {/* Map Instructions */}
+
       <div className="absolute bottom-4 right-4 z-30">
         <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 text-sm text-gray-600 shadow-lg">
           <div className="font-medium mb-1">Interactive Map</div>
-          <div>Active Layer: {activeLayer.charAt(0).toUpperCase() + activeLayer.slice(1)}</div>
-          <div className="text-xs text-gray-500">Click markers to drill down</div>
+          <div>Current Level: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}</div>
+          <div>Zoom Level: {zoomLevel}</div>
+          <div className="text-xs text-gray-500">Click regions to view details</div>
         </div>
       </div>
     </div>
