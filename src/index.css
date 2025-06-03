@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,47 +36,32 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
@@ -97,5 +83,201 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Responsive Media Queries */
+
+/* Large Desktops (1920px and above) */
+@media (min-width: 1920px) {
+  .dashboard-layout {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+  
+  .sidebar-chat {
+    min-width: 400px;
+  }
+  
+  .map-controls {
+    min-width: 80px;
+  }
+  
+  .schemes-section {
+    padding: 2rem;
+  }
+}
+
+/* Standard Desktops (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .sidebar-chat {
+    min-width: 360px;
+  }
+  
+  .map-controls {
+    min-width: 72px;
+  }
+  
+  .schemes-section {
+    padding: 1.5rem;
+  }
+}
+
+/* Laptops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .sidebar-chat {
+    min-width: 320px;
+  }
+  
+  .map-controls {
+    min-width: 64px;
+  }
+  
+  .schemes-section {
+    padding: 1rem;
+  }
+  
+  .tabs-content {
+    padding: 0.75rem;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar-chat {
+    min-width: 280px;
+    max-width: 320px;
+  }
+  
+  .map-controls {
+    min-width: 56px;
+  }
+  
+  .schemes-section {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .scheme-item {
+    font-size: 0.875rem;
+  }
+  
+  .tabs-list {
+    flex-wrap: wrap;
+  }
+}
+
+/* Mobile Landscape (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar-chat {
+    min-width: 100%;
+    height: 250px;
+    border-right: none;
+    border-bottom: 1px solid rgb(229 231 235);
+  }
+  
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .map-controls {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.5rem;
+    border-left: none;
+    border-top: 1px solid rgb(229 231 235);
+  }
+  
+  .schemes-section {
+    padding: 0.5rem;
+    order: -1;
+  }
+  
+  .map-area {
+    height: 400px;
+  }
+}
+
+/* Mobile Portrait (below 640px) */
+@media (max-width: 639px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar-chat {
+    min-width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgb(229 231 235);
+  }
+  
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .map-controls {
+    display: none; /* Hide on very small screens */
+  }
+  
+  .schemes-section {
+    padding: 0.5rem;
+    order: -1;
+    overflow-x: auto;
+  }
+  
+  .scheme-item {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+  }
+  
+  .tabs-content {
+    padding: 0.5rem;
+  }
+  
+  .map-area {
+    height: 300px;
+  }
+  
+  .navbar {
+    padding: 0.5rem;
+  }
+  
+  .navbar h1 {
+    font-size: 1.25rem;
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .map-container {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .sidebar-chat,
+  .map-controls,
+  .navbar {
+    display: none;
+  }
+  
+  .main-content {
+    width: 100%;
+    height: auto;
+  }
+  
+  .map-area {
+    height: 500px;
+    page-break-inside: avoid;
   }
 }

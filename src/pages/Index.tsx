@@ -74,15 +74,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50 relative overflow-hidden dashboard-layout">
       {/* Fixed Navbar */}
       <Navbar />
       
       {/* Main Layout with Sidebar */}
-      <div className="pt-16 h-screen flex">
+      <div className="pt-16 h-screen flex main-content">
         
         {/* Left Sidebar - Permanent Chatbot */}
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <div className="w-80 bg-white border-r border-gray-200 flex flex-col sidebar-chat">
           <div className="p-4 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">MITRA Assistant</h3>
             <p className="text-sm text-gray-600">Ask me about the dashboard data</p>
@@ -99,7 +99,7 @@ const Index = () => {
           <div className="px-6 py-3 bg-white border-b">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-center">
-                <TabsList className="h-10 bg-gray-100">
+                <TabsList className="h-10 bg-gray-100 tabs-list">
                   <TabsTrigger value="summary" className="px-8 py-2">Summary</TabsTrigger>
                   <TabsTrigger value="map" className="px-8 py-2">Map</TabsTrigger>
                 </TabsList>
@@ -113,8 +113,8 @@ const Index = () => {
             {/* Main Content */}
             <div className="flex-1 relative">
               {activeTab === 'map' && (
-                <div className="absolute inset-0 p-4">
-                  <div className="h-full relative">
+                <div className="absolute inset-0 p-4 tabs-content">
+                  <div className="h-full relative map-area">
                     {/* Main Map Area */}
                     <div className="h-full bg-white rounded-lg border relative">
                       <InteractiveMap
@@ -147,7 +147,7 @@ const Index = () => {
               )}
 
               {activeTab === 'summary' && (
-                <div className="absolute inset-0 p-4">
+                <div className="absolute inset-0 p-4 tabs-content">
                   <SummaryPanel 
                     selectedIndicator={selectedIndicator}
                     selectedRegion={selectedRegion}
@@ -162,7 +162,7 @@ const Index = () => {
 
             {/* Right Sidebar - Map Layer Controls */}
             {activeTab === 'map' && (
-              <div className="w-16 border-l border-gray-200 bg-white">
+              <div className="w-16 border-l border-gray-200 bg-white map-controls">
                 <MapLayerControls 
                   activeLayer={activeMapLayer}
                   onLayerChange={setActiveMapLayer}
@@ -172,7 +172,7 @@ const Index = () => {
           </div>
 
           {/* Bottom Schemes Section */}
-          <div className="bg-white border-t p-4">
+          <div className="bg-white border-t p-4 schemes-section">
             <SchemesList 
               schemes={schemes}
               selectedScheme={selectedIndicator}
