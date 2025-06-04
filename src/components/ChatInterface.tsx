@@ -35,8 +35,7 @@ export const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual webhook endpoint
-      const webhookUrl = process.env.VITE_CHATBOT_WEBHOOK_URL || 'YOUR_WEBHOOK_URL_HERE';
+      const webhookUrl = import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock2.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -46,7 +45,8 @@ export const ChatInterface = () => {
         body: JSON.stringify({
           message: userMessage.message,
           timestamp: userMessage.timestamp.toISOString(),
-          sessionId: 'user-session', // Generate proper session ID
+          sessionId: 'user-session',
+          source: 'mitra_dashboard',
         }),
       });
 
@@ -55,31 +55,31 @@ export const ChatInterface = () => {
         
         const botMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
-          message: botResponse.message || 'Response received from bot',
+          message: botResponse.message || botResponse.text || 'Response received from bot',
           timestamp: new Date(),
           isUser: false
         };
 
         setMessages(prev => [...prev, botMessage]);
       } else {
-        throw new Error('Failed to send message');
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
       console.error('Chat error:', error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please check webhook configuration.",
+        description: "Failed to send message to chatbot. Please try again.",
         variant: "destructive",
       });
       
-      // Add mock response for demo
-      const mockResponse: ChatMessage = {
+      // Add fallback response
+      const fallbackResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        message: 'Hello! I am the MITRA chatbot. How can I help you with the dashboard data?',
+        message: 'Sorry, I am currently experiencing technical difficulties. Please try again later.',
         timestamp: new Date(),
         isUser: false
       };
-      setMessages(prev => [...prev, mockResponse]);
+      setMessages(prev => [...prev, fallbackResponse]);
     } finally {
       setIsLoading(false);
     }

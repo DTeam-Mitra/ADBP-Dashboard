@@ -15,12 +15,12 @@ export interface WebhookConfig {
 
 export const webhookConfig: WebhookConfig = {
   chatbot: {
-    url: process.env.VITE_CHATBOT_WEBHOOK_URL || 'YOUR_CHATBOT_WEBHOOK_URL',
+    url: import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock2.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d',
     timeout: 10000, // 10 seconds
     retries: 3,
   },
   dataSync: {
-    url: process.env.VITE_DATA_SYNC_WEBHOOK_URL || 'YOUR_DATA_SYNC_WEBHOOK_URL',
+    url: import.meta.env.VITE_DATA_SYNC_WEBHOOK_URL || 'YOUR_DATA_SYNC_WEBHOOK_URL',
     interval: 30000, // 30 seconds
   },
 };
@@ -55,7 +55,7 @@ export class WebhookService {
 
         if (response.ok) {
           const data = await response.json();
-          return { message: data.message || 'Response received', success: true };
+          return { message: data.message || data.text || 'Response received', success: true };
         } else {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
