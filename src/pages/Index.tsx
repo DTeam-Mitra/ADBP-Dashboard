@@ -6,11 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
-import { SummaryPanel } from '@/components/SummaryPanel';
 import { MapTooltip } from '@/components/MapTooltip';
 import { ChatInterface } from '@/components/ChatInterface';
 import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
+import { DashboardThemes } from '@/components/DashboardThemes';
+import { AccessibilityToolbar } from '@/components/AccessibilityToolbar';
+import { useAccessibility } from '@/contexts/AccessibilityContext';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -18,8 +20,9 @@ const Index = () => {
   const [selectedIndicator, setSelectedIndicator] = useState('population');
   const [currentLevel, setCurrentLevel] = useState('country');
   const [tooltipData, setTooltipData] = useState(null);
-  const [activeTab, setActiveTab] = useState('map');
+  const [activeTab, setActiveTab] = useState('insights');
   const [activeMapLayer, setActiveMapLayer] = useState('default');
+  const { fontSize, isDarkMode } = useAccessibility();
 
   // Sample data for schemes
   const schemes = [
@@ -74,18 +77,21 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden dashboard-layout">
+    <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-background text-foreground relative overflow-hidden dashboard-layout`} style={{ fontSize: `${fontSize}rem` }}>
       {/* Fixed Navbar */}
       <Navbar />
+      
+      {/* Accessibility Toolbar */}
+      <AccessibilityToolbar />
       
       {/* Main Layout with Sidebar */}
       <div className="pt-16 h-screen flex main-content">
         
         {/* Left Sidebar - Permanent Chatbot */}
-        <div className="w-80 bg-white border-r border-gray-200 flex flex-col sidebar-chat">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">MITRA Assistant</h3>
-            <p className="text-sm text-gray-600">Ask me about the dashboard data</p>
+        <div className="w-80 bg-background border-r border-border flex flex-col sidebar-chat">
+          <div className="p-4 border-b border-border">
+            <h3 className="text-lg font-semibold text-foreground">MITRA Assistant</h3>
+            <p className="text-sm text-muted-foreground">Ask me about the dashboard data</p>
           </div>
           <div className="flex-1">
             <ChatInterface />
@@ -96,12 +102,12 @@ const Index = () => {
         <div className="flex-1 flex flex-col">
           
           {/* Top Tabs Section */}
-          <div className="px-6 py-3 bg-white border-b">
+          <div className="px-6 py-3 bg-background border-b border-border">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-center">
-                <TabsList className="h-10 bg-gray-100 tabs-list">
-                  <TabsTrigger value="summary" className="px-8 py-2">Summary</TabsTrigger>
-                  <TabsTrigger value="map" className="px-8 py-2">Map</TabsTrigger>
+                <TabsList className="h-10 bg-muted tabs-list">
+                  <TabsTrigger value="insights" className="px-8 py-2">Development Insights</TabsTrigger>
+                  <TabsTrigger value="map" className="px-8 py-2">Interactive Map</TabsTrigger>
                 </TabsList>
               </div>
             </Tabs>
@@ -116,7 +122,7 @@ const Index = () => {
                 <div className="absolute inset-0 p-4 tabs-content">
                   <div className="h-full relative map-area">
                     {/* Main Map Area */}
-                    <div className="h-full bg-white rounded-lg border relative">
+                    <div className="h-full bg-background rounded-lg border border-border relative">
                       <InteractiveMap
                         currentLevel={currentLevel}
                         selectedRegion={selectedRegion}
@@ -130,12 +136,12 @@ const Index = () => {
                       
                       {/* Map Overlay Info */}
                       <div className="absolute top-4 left-4 z-30">
-                        <Card className="p-3 bg-white/90 backdrop-blur-sm">
-                          <div className="text-sm font-medium text-gray-700">
+                        <Card className="p-3 bg-background/90 backdrop-blur-sm border-border">
+                          <div className="text-sm font-medium text-foreground">
                             Current View: {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
                           </div>
                           {selectedRegion && (
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-muted-foreground mt-1">
                               {selectedRegion.name}
                             </div>
                           )}
@@ -146,23 +152,18 @@ const Index = () => {
                 </div>
               )}
 
-              {activeTab === 'summary' && (
+              {activeTab === 'insights' && (
                 <div className="absolute inset-0 p-4 tabs-content">
-                  <SummaryPanel 
-                    selectedIndicator={selectedIndicator}
-                    selectedRegion={selectedRegion}
-                    currentLevel={currentLevel}
-                    onScroll={() => {}}
-                    onFocus={() => {}}
-                    className="h-full"
-                  />
+                  <div className="h-full overflow-auto">
+                    <DashboardThemes />
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Right Sidebar - Map Layer Controls */}
             {activeTab === 'map' && (
-              <div className="w-16 border-l border-gray-200 bg-white map-controls">
+              <div className="w-16 border-l border-border bg-background map-controls">
                 <MapLayerControls 
                   activeLayer={activeMapLayer}
                   onLayerChange={setActiveMapLayer}
@@ -172,7 +173,7 @@ const Index = () => {
           </div>
 
           {/* Bottom Schemes Section */}
-          <div className="bg-white border-t p-4 schemes-section">
+          <div className="bg-background border-t border-border p-4 schemes-section">
             <SchemesList 
               schemes={schemes}
               selectedScheme={selectedIndicator}
