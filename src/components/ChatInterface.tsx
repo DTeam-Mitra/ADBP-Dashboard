@@ -86,11 +86,11 @@ export const ChatInterface = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-background">
       {/* Chat Messages */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3">
         {messages.length === 0 && (
-          <div className="text-sm text-gray-500 text-center py-8">
+          <div className="text-sm text-muted-foreground text-center py-8">
             Start a conversation with the MITRA assistant
           </div>
         )}
@@ -102,8 +102,8 @@ export const ChatInterface = () => {
             <div
               className={`max-w-[80%] text-sm p-3 rounded-lg ${
                 msg.isUser 
-                  ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted text-muted-foreground'
               }`}
             >
               {msg.message}
@@ -112,11 +112,11 @@ export const ChatInterface = () => {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 text-gray-800 p-3 rounded-lg">
+            <div className="bg-muted text-muted-foreground p-3 rounded-lg">
               <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -124,14 +124,14 @@ export const ChatInterface = () => {
       </div>
       
       {/* Input Section */}
-      <div className="border-t p-4">
+      <div className="border-t border-border p-4">
         <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
           <input 
             type="text" 
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Ask about dashboard data..."
-            className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 px-3 py-2 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
             disabled={isLoading}
           />
           <Button 

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { MapTooltip } from '@/components/MapTooltip';
-import { ChatInterface } from '@/components/ChatInterface';
+import { CollapsibleChatSidebar } from '@/components/CollapsibleChatSidebar';
 import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
 import { DashboardThemes } from '@/components/DashboardThemes';
@@ -87,16 +87,8 @@ const Index = () => {
       {/* Main Layout with Sidebar */}
       <div className="pt-16 h-screen flex main-content">
         
-        {/* Left Sidebar - Permanent Chatbot */}
-        <div className="w-80 bg-background border-r border-border flex flex-col sidebar-chat">
-          <div className="p-4 border-b border-border">
-            <h3 className="text-lg font-semibold text-foreground">MITRA Assistant</h3>
-            <p className="text-sm text-muted-foreground">Ask me about the dashboard data</p>
-          </div>
-          <div className="flex-1">
-            <ChatInterface />
-          </div>
-        </div>
+        {/* Left Sidebar - Collapsible Chatbot */}
+        <CollapsibleChatSidebar />
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
