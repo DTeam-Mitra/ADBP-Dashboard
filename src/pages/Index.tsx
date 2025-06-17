@@ -10,8 +10,7 @@ import { MapTooltip } from '@/components/MapTooltip';
 import { CollapsibleChatSidebar } from '@/components/CollapsibleChatSidebar';
 import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
-import { DashboardThemes } from '@/components/DashboardThemes';
-import { AccessibilityToolbar } from '@/components/AccessibilityToolbar';
+import { EnhancedDashboardThemes } from '@/components/EnhancedDashboardThemes';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 
 const Index = () => {
@@ -81,17 +80,14 @@ const Index = () => {
       {/* Fixed Navbar */}
       <Navbar />
       
-      {/* Accessibility Toolbar */}
-      <AccessibilityToolbar />
-      
       {/* Main Layout with Sidebar */}
       <div className="pt-16 h-screen flex main-content">
         
         {/* Left Sidebar - Collapsible Chatbot */}
         <CollapsibleChatSidebar />
 
-        {/* Main Content Area */}
-        <div className="flex-1 flex flex-col">
+        {/* Main Content Area - Dynamically Expand */}
+        <div className="flex-1 flex flex-col min-w-0">
           
           {/* Top Tabs Section */}
           <div className="px-6 py-3 bg-background border-b border-border">
@@ -106,10 +102,10 @@ const Index = () => {
           </div>
 
           {/* Content Area with Right Controls */}
-          <div className="flex-1 flex">
+          <div className="flex-1 flex min-h-0">
             
             {/* Main Content */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative min-w-0">
               {activeTab === 'map' && (
                 <div className="absolute inset-0 p-4 tabs-content">
                   <div className="h-full relative map-area">
@@ -147,7 +143,7 @@ const Index = () => {
               {activeTab === 'insights' && (
                 <div className="absolute inset-0 p-4 tabs-content">
                   <div className="h-full overflow-auto">
-                    <DashboardThemes />
+                    <EnhancedDashboardThemes />
                   </div>
                 </div>
               )}

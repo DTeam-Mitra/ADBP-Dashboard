@@ -9,20 +9,20 @@ export const CollapsibleChatSidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className={`transition-all duration-300 ${isOpen ? 'w-80' : 'w-12'} bg-background border-r border-border flex flex-col sidebar-chat`}>
+    <div className={`transition-all duration-300 ${isOpen ? 'w-80' : 'w-12'} bg-sidebar-background border-r border-sidebar-border flex flex-col sidebar-chat`}>
       {/* Toggle Button */}
-      <div className="p-2 border-b border-border flex justify-between items-center">
+      <div className="p-2 border-b border-sidebar-border flex justify-between items-center bg-sidebar-background">
         {isOpen && (
           <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">MITRA Assistant</h3>
+            <MessageCircle className="h-5 w-5 text-sidebar-primary" />
+            <h3 className="text-lg font-semibold text-sidebar-foreground">MITRA Assistant</h3>
           </div>
         )}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(!isOpen)}
-          className="h-8 w-8 p-0"
+          className="h-8 w-8 p-0 hover:bg-sidebar-accent text-sidebar-foreground"
         >
           {isOpen ? (
             <ChevronLeft className="h-4 w-4" />
@@ -35,8 +35,8 @@ export const CollapsibleChatSidebar = () => {
       {/* Chat Content */}
       {isOpen && (
         <>
-          <div className="px-4 py-2 border-b border-border">
-            <p className="text-sm text-muted-foreground">Ask me about the dashboard data</p>
+          <div className="px-4 py-2 border-b border-sidebar-border bg-sidebar-background">
+            <p className="text-sm text-sidebar-foreground/70">Ask me about the dashboard data</p>
           </div>
           <div className="flex-1">
             <ChatInterface />
@@ -46,8 +46,8 @@ export const CollapsibleChatSidebar = () => {
 
       {/* Collapsed State */}
       {!isOpen && (
-        <div className="flex-1 flex items-center justify-center">
-          <MessageCircle className="h-6 w-6 text-muted-foreground" />
+        <div className="flex-1 flex items-center justify-center bg-sidebar-background">
+          <MessageCircle className="h-6 w-6 text-sidebar-foreground/60" />
         </div>
       )}
     </div>

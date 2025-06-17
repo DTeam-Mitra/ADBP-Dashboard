@@ -86,11 +86,11 @@ export const ChatInterface = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="h-full flex flex-col" style={{ backgroundColor: 'hsl(var(--chat-background))', color: 'hsl(var(--chat-foreground))' }}>
       {/* Chat Messages */}
       <div className="flex-1 p-4 overflow-y-auto space-y-3">
         {messages.length === 0 && (
-          <div className="text-sm text-muted-foreground text-center py-8">
+          <div className="text-sm text-opacity-70 text-center py-8" style={{ color: 'hsl(var(--chat-foreground))' }}>
             Start a conversation with the MITRA assistant
           </div>
         )}
@@ -102,9 +102,17 @@ export const ChatInterface = () => {
             <div
               className={`max-w-[80%] text-sm p-3 rounded-lg ${
                 msg.isUser 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted text-muted-foreground'
+                  ? 'text-white' 
+                  : ''
               }`}
+              style={{
+                backgroundColor: msg.isUser 
+                  ? 'hsl(var(--chat-user-bg))' 
+                  : 'hsl(var(--chat-bot-bg))',
+                color: msg.isUser 
+                  ? 'hsl(var(--chat-user-fg))' 
+                  : 'hsl(var(--chat-bot-fg))'
+              }}
             >
               {msg.message}
             </div>
@@ -112,11 +120,11 @@ export const ChatInterface = () => {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-muted text-muted-foreground p-3 rounded-lg">
+            <div className="p-3 rounded-lg" style={{ backgroundColor: 'hsl(var(--chat-bot-bg))', color: 'hsl(var(--chat-bot-fg))' }}>
               <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'hsl(var(--chat-bot-fg))' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'hsl(var(--chat-bot-fg))', animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'hsl(var(--chat-bot-fg))', animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -124,14 +132,19 @@ export const ChatInterface = () => {
       </div>
       
       {/* Input Section */}
-      <div className="border-t border-border p-4">
+      <div className="border-t p-4" style={{ borderColor: 'hsl(var(--sidebar-border))', backgroundColor: 'hsl(var(--chat-background))' }}>
         <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
           <input 
             type="text" 
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Ask about dashboard data..."
-            className="flex-1 px-3 py-2 text-sm border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+            className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            style={{
+              borderColor: 'hsl(var(--sidebar-border))',
+              backgroundColor: 'hsl(var(--chat-background))',
+              color: 'hsl(var(--chat-foreground))'
+            }}
             disabled={isLoading}
           />
           <Button 
