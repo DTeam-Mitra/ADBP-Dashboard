@@ -6,6 +6,12 @@ import { Input } from '@/components/ui/input';
 import { TrendingUp, TrendingDown, Search, Filter } from 'lucide-react';
 import { IndicatorCards } from './IndicatorCards';
 import { parseCSVData, CSVData } from '@/utils/csvParser';
+import { MaharashtraMap } from './MaharashtraMap';
+import { DistrictMap } from './DistrictMap';
+
+// Top level navigation
+const LEVEL_TABS = ['State', 'District'];
+const SECTION_TABS = ['Highlights', 'Indicators', 'Schemes'];
 
 interface ThemeData {
   id: string;
@@ -18,11 +24,11 @@ interface ThemeData {
   worstScore: number;
 }
 
-interface EnhancedDashboardThemesProps {
-  onThemeSelect?: (theme: string) => void;
-}
-
-export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = ({ onThemeSelect }) => {
+export const EnhancedDashboardThemes: React.FC = () => {
+  const [districtToShow, setDistrictToShow] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<number>(0); // National/State/District
+  const [selectedSection, setSelectedSection] = useState<number>(0); // Highlights, Indicators, ...
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [csvData, setCSVData] = useState<CSVData[]>([]);
   const [themes, setThemes] = useState<ThemeData[]>([]);
@@ -34,11 +40,19 @@ export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = (
     loadCSVData();
   }, []);
 
+  // When switching level, reset selectedDistrict if needed
+  useEffect(() => {
+    if (selectedLevel === 0) {
+      setSelectedDistrict(null); // when switching to State, clear selectedDistrict
+    }
+    // Optionally, you could set a default for District here
+  }, [selectedLevel]);
+
   useEffect(() => {
     if (searchTerm) {
-      const filtered = csvData.filter(row => 
-        row.districtName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.blockName.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = csvData.filter(row =>
+        row.districtName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.blockName?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredData(filtered);
     } else {
@@ -72,14 +86,14 @@ export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = (
           agriculture: []
         };
       }
-      
+
       acc[row.districtName].health.push(row.health.compositeScore);
       acc[row.districtName].nutrition.push(row.nutrition.compositeScore);
       acc[row.districtName].basicInfra.push(row.basicInfra.compositeScore);
       acc[row.districtName].socialDevelopment.push(row.socialInfra.compositeScore);
       acc[row.districtName].education.push(row.education.compositeScore);
       acc[row.districtName].agriculture.push(row.agriculture.compositeScore);
-      
+
       return acc;
     }, {} as Record<string, any>);
 
@@ -91,7 +105,7 @@ export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = (
       }).filter(item => item.score > 0);
 
       districtScores.sort((a, b) => b.score - a.score);
-      
+
       return {
         best: districtScores[0] || { district: 'N/A', score: 0 },
         worst: districtScores[districtScores.length - 1] || { district: 'N/A', score: 0 }
@@ -161,15 +175,6 @@ export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = (
     setThemes(themesList);
   };
 
-  const handleThemeClick = (themeId: string) => {
-    setSelectedTheme(themeId);
-    onThemeSelect?.(themeId);
-  };
-
-  const handleBackToThemes = () => {
-    setSelectedTheme(null);
-  };
-
   const getIndicatorsForTheme = (row: CSVData, themeId: string) => {
     switch (themeId) {
       case 'health-nutrition':
@@ -220,96 +225,213 @@ export const EnhancedDashboardThemes: React.FC<EnhancedDashboardThemesProps> = (
     );
   }
 
-  if (selectedTheme) {
-    const themeName = themes.find(t => t.id === selectedTheme)?.name || 'Theme';
-    
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{themeName} - Detailed Data</h2>
-          <Button variant="outline" onClick={handleBackToThemes}>
-            ← Back to Themes
-          </Button>
-        </div>
-        
-        {/* Search and Filter Bar */}
-        <div className="flex items-center gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search districts or blocks..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Button variant="outline" size="sm">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </Button>
-        </div>
-
-        {/* Cards Grid */}
-        <div className="space-y-4">
-          {filteredData.map((row, index) => (
-            <IndicatorCards
-              key={index}
-              district={row.districtName}
-              block={row.blockName}
-              indicators={getIndicatorsForTheme(row, selectedTheme)}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2">Development Themes</h2>
-        <p className="text-muted-foreground">Key development indicators across Maharashtra</p>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {themes.map((theme) => (
-          <Card 
-            key={theme.id} 
-            className="p-6 cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary"
-            onClick={() => handleThemeClick(theme.id)}
+    <div className="p-4 space-y-6">
+      {/* Top Navigation Tabs */}
+      <div className="flex gap-4 mb-2">
+        {LEVEL_TABS.map((tab, idx) => (
+          <button
+            key={tab}
+            className={`px-4 py-2 rounded-t-lg font-semibold 
+              ${selectedLevel === idx ? 'bg-white shadow border-b-2 border-blue-600 text-blue-700' : 'bg-transparent text-gray-500'}
+            `}
+            onClick={() => {
+              setSelectedLevel(idx);
+              if (idx === 0) setSelectedDistrict(null);
+              // Optionally, for District tab, prompt for district or retain last
+            }}
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className={`w-12 h-12 rounded-lg ${theme.color} flex items-center justify-center text-white text-xl`}>
-                {theme.icon}
-              </div>
-              <h3 className="text-lg font-semibold">{theme.name}</h3>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Best Performing</span>
-                <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                  <TrendingUp className="w-3 h-3 mr-1" />
-                  {theme.bestDistrict}
-                </Badge>
-              </div>
-              <div className="text-sm text-right text-green-600 font-medium">
-                Score: {theme.bestScore.toFixed(1)}
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Needs Improvement</span>
-                <Badge variant="secondary" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100">
-                  <TrendingDown className="w-3 h-3 mr-1" />
-                  {theme.worstDistrict}
-                </Badge>
-              </div>
-              <div className="text-sm text-right text-orange-600 font-medium">
-                Score: {theme.worstScore.toFixed(1)}
-              </div>
-            </div>
-          </Card>
+            {tab}
+          </button>
         ))}
+      </div>
+
+
+      {/* Theme Selector */}
+      <div className="flex gap-4 mb-4">
+        {themes.map((theme) => (
+          <button
+            key={theme.id}
+            className={`px-4 py-2 rounded-full border 
+              ${selectedTheme === theme.id ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-blue-600 border-blue-600'}
+            `}
+            onClick={() => setSelectedTheme(theme.id)}
+          >
+            <span className="mr-2">{theme.icon}</span>
+            {theme.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Section Tabs */}
+      <div className="flex gap-6 mb-4 border-b">
+        {SECTION_TABS.map((tab, idx) => (
+          <button
+            key={tab}
+            className={`pb-2 px-2 font-medium border-b-2 transition-all
+              ${selectedSection === idx ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-400'}
+            `}
+            onClick={() => setSelectedSection(idx)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Main Panel */}
+      <div className="flex flex-row gap-8">
+        {/* Map */}
+        <div className="w-2/5">
+          {districtToShow ? (
+            <DistrictMap
+              districtName={districtToShow}
+              onBack={() => setDistrictToShow(null)}
+            />
+          ) : (
+            <MaharashtraMap
+              selectedDistrict={districtToShow}
+              onDistrictOpen={setDistrictToShow}
+            />
+          )}
+        </div>
+
+        {/* Main content area */}
+        <div className="flex-1">
+          {/* If a district is selected, show info card */}
+          {selectedDistrict ? (
+            <div className="mb-4">
+              <div className="p-4 rounded-xl shadow bg-white mb-4">
+                <div className="text-xl font-bold mb-1">{selectedDistrict}</div>
+                {csvData
+                  .filter(row => row.districtName === selectedDistrict)
+                  .slice(0, 1)
+                  .map((row, idx) => (
+                    <div key={idx}>
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <div>Health Score: <b>{row.health.compositeScore}</b></div>
+                        <div>Nutrition Score: <b>{row.nutrition.compositeScore}</b></div>
+                        <div>Education Score: <b>{row.education.compositeScore}</b></div>
+                        <div>Agriculture Score: <b>{row.agriculture.compositeScore}</b></div>
+                        <div>Infra Score: <b>{row.basicInfra.compositeScore}</b></div>
+                        <div>Social Score: <b>{row.socialInfra.compositeScore}</b></div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              <Button onClick={() => setSelectedDistrict(null)} variant="outline">
+                ← Back to Map
+              </Button>
+            </div>
+          ) : (
+            <>
+              {selectedSection === 0 && (
+                <div className="space-y-6">
+                  <div className="text-xl font-bold mb-2">
+                    {selectedTheme ? `Highlights: ${themes.find(t => t.id === selectedTheme)?.name}` : 'Theme Highlights'}
+                  </div>
+                  {!selectedTheme ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {themes.map((theme) => (
+                        <Card
+                          key={theme.id}
+                          className="p-6 cursor-pointer hover:shadow-lg transition-shadow border-2 hover:border-primary"
+                          onClick={() => setSelectedTheme(theme.id)}
+                        >
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className={`w-12 h-12 rounded-lg ${theme.color} flex items-center justify-center text-white text-xl`}>
+                              {theme.icon}
+                            </div>
+                            <h3 className="text-lg font-semibold">{theme.name}</h3>
+                          </div>
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">Best Performing</span>
+                              <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                {theme.bestDistrict}
+                              </Badge>
+                            </div>
+                            <div className="text-sm text-right text-green-600 font-medium">
+                              Score: {theme.bestScore?.toFixed(1)}
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-muted-foreground">Needs Improvement</span>
+                              <Badge variant="secondary" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100">
+                                <TrendingDown className="w-3 h-3 mr-1" />
+                                {theme.worstDistrict}
+                              </Badge>
+                            </div>
+                            <div className="text-sm text-right text-orange-600 font-medium">
+                              Score: {theme.worstScore?.toFixed(1)}
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-gray-600 text-lg">Select “Indicators” or “Schemes” tab for more details of this theme.</div>
+                  )}
+                </div>
+              )}
+
+              {selectedSection === 1 && selectedTheme && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold">{themes.find(t => t.id === selectedTheme)?.name} - Indicators</h2>
+                    <Button variant="outline" onClick={() => setSelectedTheme(null)}>
+                      ← Back to Themes
+                    </Button>
+                  </div>
+                  {/* Search and Filter Bar */}
+                  <div className="flex items-center gap-4 mb-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search districts or blocks..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                  </div>
+                  {/* Cards Grid */}
+                  <div className="space-y-4">
+                    {filteredData.map((row, index) => (
+                      <IndicatorCards
+                        key={index}
+                        district={row.districtName}
+                        block={row.blockName}
+                        indicators={getIndicatorsForTheme(row, selectedTheme)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedSection === 2 && selectedTheme && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold">{themes.find(t => t.id === selectedTheme)?.name} - Schemes</h2>
+                    <Button variant="outline" onClick={() => setSelectedTheme(null)}>
+                      ← Back to Themes
+                    </Button>
+                  </div>
+                  <div className="text-gray-500">[Scheme-related cards/tables will appear here. You can add logic as needed.]</div>
+                </div>
+              )}
+
+              {selectedSection >= 3 && (
+                <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                  [Coming soon...]
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

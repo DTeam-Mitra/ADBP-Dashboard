@@ -1,4 +1,3 @@
-
 export interface CSVData {
   sno: number;
   stateName: string;
@@ -77,14 +76,18 @@ export const parseCSVData = (csvText: string): CSVData[] => {
   const lines = csvText.split('\n');
   const data: CSVData[] = [];
   
-  // Skip header rows (first 2 lines)
-  for (let i = 2; i < lines.length; i++) {
+  // Skip header rows (first 6 lines based on visual inspection from the file content)
+  // The actual data starts from the 7th line (index 6)
+  for (let i = 6; i < lines.length; i++) { // Adjusted starting index for data rows
     const line = lines[i].trim();
     if (!line) continue;
     
-    const values = line.split(',');
+    // Changed delimiter from ',' to '\t'
+    const values = line.split('\t');
     
-    if (values.length >= 65) {
+    // Adjusted expected number of columns.
+    // There are 59 columns (from index 0 to 58) in the data rows.
+    if (values.length >= 59) { 
       const row: CSVData = {
         sno: parseFloat(values[0]) || 0,
         stateName: values[1] || '',
@@ -158,10 +161,10 @@ export const parseCSVData = (csvText: string): CSVData[] => {
         },
         balancedCompositeScore: parseFloat(values[58]) || 0,
       };
-      
       data.push(row);
+    } else {
+      console.warn(`Skipping row due to insufficient columns: ${line}`);
     }
   }
-  
   return data;
 };

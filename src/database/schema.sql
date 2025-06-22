@@ -23,7 +23,7 @@ CREATE TABLE schemes (
 CREATE TABLE regions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL CHECK (type IN ('country', 'state', 'district', 'block')),
+    type VARCHAR(50) NOT NULL CHECK (type IN ('state', 'district', 'block')),
     parent_id UUID REFERENCES regions(id),
     coordinates JSONB, -- Store lat/lng as JSON
     population BIGINT,

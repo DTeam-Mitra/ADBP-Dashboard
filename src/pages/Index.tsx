@@ -12,6 +12,9 @@ import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
 import { EnhancedDashboardThemes } from '@/components/EnhancedDashboardThemes';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
+import 'leaflet/dist/leaflet.css';
+import DashV4 from '@/components/DashboardVfour';
+import DashV3 from '@/components/DashboardVthree';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -89,7 +92,7 @@ const Index = () => {
         {/* Main Content Area - Dynamically Expand */}
         <div className="flex-1 flex flex-col min-w-0">
           
-          {/* Top Tabs Section */}
+          {/* Top Tabs Section 
           <div className="px-6 py-3 bg-background border-b border-border">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-center">
@@ -143,7 +146,7 @@ const Index = () => {
               {activeTab === 'insights' && (
                 <div className="absolute inset-0 p-4 tabs-content">
                   <div className="h-full overflow-auto">
-                    <EnhancedDashboardThemes />
+                    <DashV3/>
                   </div>
                 </div>
               )}
@@ -160,24 +163,17 @@ const Index = () => {
             )}
           </div>
 
-          {/* Bottom Schemes Section */}
-          <div className="bg-background border-t border-border p-4 schemes-section">
-            <SchemesList 
-              schemes={schemes}
-              selectedScheme={selectedIndicator}
-              onSchemeSelect={setSelectedIndicator}
-            />
-          </div>
+          
         </div>
       </div>
 
-      {/* Map Tooltip */}
+      {/* Map Tooltip 
       {tooltipData && (
         <MapTooltip
           data={tooltipData}
           selectedIndicator={selectedIndicator}
         />
-      )}
+      )}*/}
     </div>
   );
 };
