@@ -15,7 +15,7 @@ export interface WebhookConfig {
 
 export const webhookConfig: WebhookConfig = {
   chatbot: {
-    url: import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock2.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d',
+    url: import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock3.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d',
     timeout: 10000, // 10 seconds
     retries: 3,
   },

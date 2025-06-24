@@ -260,126 +260,150 @@ const THEMES = {
     }
   }
 };
+
 // --- Indicator Details ---
 const INDICATOR_DETAILS = {
   ancRegistration: {
-    desc: 'Percentage of pregnant women who have received Ante-Natal Care (ANC) registration.',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of pregnant women registered for ANC within the first trimester.',
+    Intervention: 'Pradhan Mantri Surakshit Matritva Abhiyan (PMSMA) - Janani Suraksha Yojana (JSY)',
+    sdg: '3.1 - Reduce maternal mortality'
   },
   institutionalDeliveries: {
-    desc: 'Percentage of deliveries that occurred in a medical institution.',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of institutional deliveries against total reported deliveries.',
+    Intervention: 'Janani Suraksha Yojana (JSY) - Janani Shishu Suraksha Karyakram (JSSK)',
+    sdg: '3.1 - Reduce maternal mortality'
   },
   lowBirthWeight: {
-    desc: 'Percentage of newborns with a birth weight below 2.5kg. Lower is better.',
-    sdg: 'SDG 2: Zero Hunger, SDG 3: Good Health'
+    desc: 'Percentage of low-birth weight babies (less than 2500g). Lower is better.',
+    Intervention: 'Integrated Child Development Services (ICDS) - Poshan Abhiyaan',
+    sdg: '2.2 - End malnutrition'
   },
   nqasCertified: {
-    desc: 'Percentage of health facilities certified under National Quality Assurance Standards (NQAS).',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of NQAS certified facilities in Block.',
+    Intervention: 'National Quality Assurance Standards (NQAS) Program',
+    sdg: '3.8 - Achieve universal health coverage'
   },
   hypertensionScreening: {
-    desc: 'Percentage of individuals screened for hypertension under national health programs.',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of persons screened for Hypertension.',
+    Intervention: 'Ayushman Bharat - Health and Wellness Centres (AB-HWC)',
+    sdg: '3.4 - Reduce premature mortality from NCDs'
   },
   diabetesScreening: {
-    desc: 'Percentage of individuals screened for diabetes under national health programs.',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of persons screened for Diabetes.',
+    Intervention: 'Ayushman Bharat - Health and Wellness Centres (AB-HWC)',
+    sdg: '3.4 - Reduce premature mortality from NCDs'
   },
   tbTreatmentSuccess: {
-    desc: 'Percentage of tuberculosis patients who successfully completed treatment.',
-    sdg: 'SDG 3: Good Health and Well-being'
+    desc: 'Percentage of TB cases treated successfully.',
+    Intervention: 'National Tuberculosis Elimination Programme (NTEP)',
+    sdg: '3.3 - End epidemics of communicable diseases'
   },
   pregnantWomenSN: {
-    desc: 'Percentage of pregnant women receiving supplementary nutrition.',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Percentage of pregnant women taking Supplementary Nutrition.',
+    Intervention: 'Integrated Child Development Services (ICDS) - Pradhan Mantri Matru Vandana Yojana (PMMVY)',
+    sdg: '2.2 - End malnutrition'
   },
   childrenSN: {
-    desc: 'Percentage of children (6 months–6 years) receiving supplementary nutrition.',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Percentage of children (6 months–6 years) taking Supplementary Nutrition.',
+    Intervention: 'Integrated Child Development Services (ICDS) - Poshan Abhiyaan',
+    sdg: '2.2 - End malnutrition'
   },
   measurementEfficiency: {
-    desc: 'Efficiency of anthropometric measurement of children in Anganwadi Centres.',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Measurement efficiency of children at Anganwadi Centres.',
+    Intervention: 'Poshan Abhiyaan - ICDS',
+    sdg: '2.2 - End malnutrition'
   },
   samChildren: {
-    desc: 'Percentage of children with Severe Acute Malnutrition (SAM). Lower is better.',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Percentage of children under 5 years with Severe Acute Malnutrition (SAM). Lower is better.',
+    Intervention: 'Poshan Abhiyaan - ICDS',
+    sdg: '2.2 - End malnutrition'
   },
   mamChildren: {
-    desc: 'Percentage of children with Moderate Acute Malnutrition (MAM). Lower is better.',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Percentage of children under 5 years with Moderate Acute Malnutrition (MAM). Lower is better.',
+    Intervention: 'Poshan Abhiyaan - ICDS',
+    sdg: '2.2 - End malnutrition'
   },
   toiletsAWC: {
-    desc: 'Percentage of Anganwadi Centres (AWCs) equipped with functional toilets.',
-    sdg: 'SDG 6: Clean Water and Sanitation'
+    desc: 'Percentage of operational Anganwadis with functional toilets.',
+    Intervention: 'Swachh Bharat Mission (SBM)',
+    sdg: '6.2 - Access to sanitation and hygiene'
   },
   drinkingWaterAWC: {
-    desc: 'Percentage of AWCs with access to safe drinking water.',
-    sdg: 'SDG 6: Clean Water and Sanitation'
+    desc: 'Percentage of operational Anganwadis with drinking water facilities.',
+    Intervention: 'Jal Jeevan Mission',
+    sdg: '6.1 - Access to safe water'
   },
   girlsTransitionUS: {
-    desc: 'Percentage of girls successfully transitioning from upper primary to secondary school.',
-    sdg: 'SDG 4: Quality Education, SDG 5: Gender Equality'
+    desc: 'Transition Rate - Girls (Upper Primary to Secondary).',
+    Intervention: 'Beti Bachao Beti Padhao - Samagra Shiksha Abhiyan',
+    sdg: '4.1 - Ensure free, equitable education'
   },
   ptrSchools: {
-    desc: 'Percentage of schools with an adequate Pupil-Teacher Ratio (PTR) as per norms.',
-    sdg: 'SDG 4: Quality Education'
+    desc: 'Schools with PTR ≤ 30.',
+    Intervention: 'Samagra Shiksha Abhiyan',
+    sdg: '4.c - Increase the supply of qualified teachers'
   },
   girlsToilets: {
-    desc: 'Percentage of schools with functional and separate toilets for girls.',
-    sdg: 'SDG 4: Quality Education, SDG 6: Clean Water and Sanitation'
+    desc: 'Schools with adequate girls’ toilet facilities.',
+    Intervention: 'Swachh Bharat Swachh Vidyalaya',
+    sdg: '6.2 - Access to sanitation and hygiene'
   },
   soilHealthCards: {
-    desc: 'Percentage of farmers who have received Soil Health Cards.',
-    sdg: 'SDG 2: Zero Hunger, SDG 15: Life on Land'
+    desc: 'Soil Health Cards generated.',
+    Intervention: 'Soil Health Card Scheme',
+    sdg: '2.4 - Ensure sustainable food production'
   },
   pmKisanBeneficiaries: {
-    desc: 'Percentage of eligible landholding farmers benefitting from PM-KISAN scheme.',
-    sdg: 'SDG 1: No Poverty, SDG 2: Zero Hunger'
+    desc: 'Beneficiaries under PM Kisan with AEPB Seeded.',
+    Intervention: 'Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)',
+    sdg: '2.3 - Double agricultural productivity'
   },
   animalVaccination: {
-    desc: 'Percentage of cattle and buffaloes vaccinated against Foot and Mouth Disease (FMD).',
-    sdg: 'SDG 2: Zero Hunger'
+    desc: 'Animal Vaccinated (FMD).',
+    Intervention: 'National Animal Disease Control Programme',
+    sdg: '2.4 - Sustainable agriculture'
   },
   tapWaterConnections: {
-    desc: 'Percentage of rural households with access to functional tap water connections.',
-    sdg: 'SDG 6: Clean Water and Sanitation'
+    desc: 'Households with FHTC (Functional Household Tap Connection).',
+    Intervention: 'Jal Jeevan Mission',
+    sdg: '6.1 - Access to safe water'
   },
   odfPlus: {
-    desc: 'Percentage of villages declared as ODF Plus, indicating solid and liquid waste management.',
-    sdg: 'SDG 6: Clean Water and Sanitation'
+    desc: 'Villages ODF Plus.',
+    Intervention: 'Swachh Bharat Mission (Gramin)',
+    sdg: '6.2 - Access to sanitation and hygiene'
   },
   bharatNet: {
-    desc: 'Percentage of Gram Panchayats connected by BharatNet infrastructure.',
-    sdg: 'SDG 9: Industry, Innovation and Infrastructure'
-  },
-  liveBharatNet: {
-    desc: 'Percentage of Gram Panchayats with live and functional BharatNet connectivity.',
-    sdg: 'SDG 9: Industry, Innovation and Infrastructure'
+    desc: 'Gram Panchayats with BharatNet.',
+    Intervention: 'BharatNet Project',
+    sdg: '9.c - Access to ICT'
   },
   pmayG: {
-    desc: 'Number of houses completed under the Pradhan Mantri Awas Yojana - Gramin (PMAY-G).',
-    sdg: 'SDG 11: Sustainable Cities and Communities'
+    desc: 'Households under Pradhan Mantri Awas Yojana - Gramin (PMAY-G).',
+    Intervention: 'Pradhan Mantri Awas Yojana - Gramin (PMAY-G)',
+    sdg: '11.1 - Safe and affordable housing'
   },
   shgHouseholds: {
-    desc: 'Percentage of households participating in Self-Help Groups (SHGs).',
-    sdg: 'SDG 1: No Poverty, SDG 5: Gender Equality'
+    desc: 'Households added to SHGs.',
+    Intervention: 'Deendayal Antyodaya Yojana - NRLM',
+    sdg: '5.a - Economic empowerment of women'
   },
   revolvingFund: {
-    desc: 'Percentage utilization of Revolving Fund assistance by Self-Help Groups.',
-    sdg: 'SDG 1: No Poverty, SDG 5: Gender Equality'
+    desc: 'SHGs received Revolving Fund.',
+    Intervention: 'Deendayal Antyodaya Yojana - NRLM',
+    sdg: '1.4 - Equal rights to economic resources'
   },
   bankingTouchPoints: {
-    desc: 'Percentage of Gram Panchayats with access to banking touch points such as CSPs or ATMs.',
-    sdg: 'SDG 8: Decent Work and Economic Growth'
+    desc: 'Banking touch points in block.',
+    Intervention: 'Pradhan Mantri Jan Dhan Yojana',
+    sdg: '8.10 - Financial inclusion'
   },
   digitalCertification: {
-    desc: 'Number of individuals who have received certification under digital literacy programs.',
-    sdg: 'SDG 4: Quality Education'
+    desc: 'Digital certification under PMDSA.',
+    Intervention: 'Pradhan Mantri Gramin Digital Saksharta Abhiyaan (PMGDISHA)',
+    sdg: '4.4 - Skills for work'
   }
 };
-
 
 // --- Child Components ---
 {/*
@@ -473,16 +497,17 @@ const IndicatorDetail = ({ themeKey, indicatorKey, data }) => {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 text-sm text-muted-foreground">
                         <div>
-                            <Badge variant="outline" className="border-green-500 text-green-600">Best</Badge>{" "}
-                            {performance.best.blockName} ({performance.best[themeKey][indicatorKey]}%)
+                          <Badge className="bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))]">Best</Badge>{" "}
+                          {performance.best.blockName} ({performance.best[themeKey][indicatorKey]}%)
                         </div>
                         <div>
-                            <Badge variant="destructive">Worst</Badge>{" "}
-                            {performance.worst.blockName} ({performance.worst[themeKey][indicatorKey]}%)
+                          <Badge className="bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]">Worst</Badge>{" "}
+                          {performance.worst.blockName} ({performance.worst[themeKey][indicatorKey]}%)
                         </div>
                         <div className="text-xs sm:text-sm">
-                            <span className="font-semibold">SDG:</span>{" "}
-                            {INDICATOR_DETAILS[indicatorKey]?.sdg || 'N/A'}
+                            <span className="rounded px-2 py-1 text-xs bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]">
+                              SDG: {INDICATOR_DETAILS[indicatorKey]?.sdg}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -493,17 +518,21 @@ const IndicatorDetail = ({ themeKey, indicatorKey, data }) => {
                             <span className="font-semibold text-foreground">Description:</span>{" "}
                             {INDICATOR_DETAILS[indicatorKey]?.desc || 'No description available.'}
                         </p>
+                         <p className="text-sm text-muted-foreground">
+                            <span className="font-semibold text-foreground">Intervention:</span>{" "}
+                            {INDICATOR_DETAILS[indicatorKey]?.Intervention || 'N/A'}
+                        </p>
 
-                        <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+                        <div className="space-y-3 max-h-128 overflow-y-auto pr-2">
                             {performance.sorted.map((block, idx) => {
                                 const value = block[themeKey]?.[indicatorKey] ?? 0;
                                 const isBest = block.blockName === performance.best.blockName;
                                 const isWorst = block.blockName === performance.worst.blockName;
                                 const progressColor = isWorst
-                                    ? "bg-red-500"
-                                    : isBest
-                                    ? "bg-green-600"
-                                    : "bg-blue-500";
+                                  ? "bg-[hsl(var(--destructive))]"
+                                  : isBest
+                                  ? "bg-[hsl(var(--success))]"
+                                  : "bg-[hsl(var(--primary))]";
 
                                 return (
                                     <div key={idx}>
@@ -511,7 +540,7 @@ const IndicatorDetail = ({ themeKey, indicatorKey, data }) => {
                                             <span>{block.blockName} ({block.districtName})</span>
                                             <span className="font-medium">{value}%</span>
                                         </div>
-                                        <Progress value={value} className="h-2"  /> {/*indicatorClassName={progressColor} */}
+                                        <Progress value={value} className={`h-2 ${progressColor}`}  /> {/*indicatorClassName={progressColor} */}
                                     </div>
                                 );
                             })}
@@ -715,8 +744,13 @@ export const DashV3 = () => {
         <div className="bg-background text-foreground min-h-screen">
             <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 <div className="mb-6">
-                    <h1 className="text-3xl font-bold tracking-tight">Aspirational Blocks Dashboard</h1>
-                    <p className="text-muted-foreground">Analyzing key development indicators across blocks.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-[hsl(var(--primary))]">
+                      Aspirational Blocks Dashboard
+                    </h1>
+                    <h2 className="text-[hsl(var(--accent))]">
+                    Analyzing key development indicators across blocks.
+                    </h2>
+
                 </div>
                 <div className="border-b mb-6">
                     <div className="flex space-x-4">

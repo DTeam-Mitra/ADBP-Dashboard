@@ -35,7 +35,7 @@ export const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      const webhookUrl = import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock2.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
+      const webhookUrl = import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'https://aftershock3.app.n8n.cloud/webhook-test/bf4dd093-bb02-472c-9454-7ab9af97bd1d';
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -142,7 +142,7 @@ export const ChatInterface = () => {
             className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             style={{
               borderColor: 'hsl(var(--sidebar-border))',
-              backgroundColor: 'hsl(var(--chat-background))',
+              backgroundColor: '#fff',
               color: 'hsl(var(--chat-foreground))'
             }}
             disabled={isLoading}

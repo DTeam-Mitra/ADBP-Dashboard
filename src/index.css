@@ -5,91 +5,120 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 50% 98%;         /* Ultra-light Grey */
+    --foreground: 222 84% 12%;         /* Navy/Charcoal */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 84% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 84% 12%;
 
-    --primary: 220 100% 45%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 222 60% 28%;            /* MITRA Indigo Blue */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 40% 96%;          /* Light Blue Grey */
+    --secondary-foreground: 222 47% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 214 32% 91%;
+    --muted-foreground: 215 16% 46%;
 
-    --accent: 134 61% 41%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 182 70% 42%;             /* Teal/Turquoise */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --success: 147 54% 42%;            /* Green for best */
+    --success-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 220 100% 45%;
+    --destructive: 0 80% 55%;          /* Alert Red */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 60% 28%;               /* Same as primary */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 220 14% 96%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 220 100% 45%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 220 14% 96%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 220 100% 45%;
+    --sidebar-background: 210 40% 96%; /* Very light blue-grey */
+    --sidebar-foreground: 222 10% 18%;
+    --sidebar-primary: 222 60% 28%;    /* MITRA Indigo Blue */
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 182 70% 42%;     /* Teal/Turquoise */
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 222 60% 28%;
 
-    --chat-background: 220 14% 96%;
-    --chat-foreground: 240 5.3% 26.1%;
-    --chat-user-bg: 220 100% 45%;
-    --chat-user-fg: 0 0% 98%;
-    --chat-bot-bg: 210 40% 96.1%;
-    --chat-bot-fg: 215.4 16.3% 46.9%;
+    --chat-background: 210 40% 96%;
+    --chat-foreground: 222 10% 18%;
+    --chat-user-bg: 222 60% 28%;       /* Indigo */
+    --chat-user-fg: 0 0% 100%;
+    --chat-bot-bg: 214 32% 91%;
+    --chat-bot-fg: 215 16% 46%;
+
+    /* Extra (Optional) */
+    --energy: 35 95% 53%;              /* Orange/Amber */
+    --energy-foreground: 0 0% 100%;
+    --innovation: 262 55% 58%;         /* Purple */
+    --innovation-foreground: 0 0% 100%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 84% 8%;          /* Dark Indigo/Navy */
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 220 100% 60%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 134 61% 51%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 220 100% 60%;
-    
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 220 100% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 220 100% 60%;
 
-    --chat-background: 240 5.9% 10%;
-    --chat-foreground: 240 4.8% 95.9%;
-    --chat-user-bg: 220 100% 60%;
+    --card: 222 84% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 84% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 222 60% 45%;            /* Brighter Indigo */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 22% 20%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 22% 20%;
+    --muted-foreground: 215 15% 80%;
+
+    --accent: 182 70% 52%;             /* Teal, a bit lighter for dark mode */
+    --accent-foreground: 0 0% 100%;
+
+    --success: 147 54% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 22% 20%;
+    --input: 222 22% 20%;
+    --ring: 222 60% 45%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 222 14% 12%;  /* Deep blue-grey */
+    --sidebar-foreground: 210 20% 88%;
+    --sidebar-primary: 222 60% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 182 70% 52%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 222 22% 20%;
+    --sidebar-ring: 222 60% 45%;
+
+    --chat-background: 222 14% 12%;
+    --chat-foreground: 210 20% 88%;
+    --chat-user-bg: 222 60% 45%;
     --chat-user-fg: 0 0% 100%;
-    --chat-bot-bg: 217.2 32.6% 17.5%;
-    --chat-bot-fg: 215 20.2% 65.1%;
+    --chat-bot-bg: 222 22% 20%;
+    --chat-bot-fg: 215 15% 80%;
+
+    /* Extra (Optional) */
+    --energy: 35 95% 45%;
+    --energy-foreground: 0 0% 100%;
+    --innovation: 262 55% 58%;
+    --innovation-foreground: 0 0% 100%;
   }
 }
+
 
 @layer base {
   * {

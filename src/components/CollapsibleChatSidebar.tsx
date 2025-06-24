@@ -18,7 +18,7 @@ export const CollapsibleChatSidebar = () => {
             <h3 className="text-lg font-semibold text-sidebar-foreground">MITRA Assistant</h3>
           </div>
         )}
-        <Button
+        {/* <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsOpen(!isOpen)}
@@ -29,7 +29,7 @@ export const CollapsibleChatSidebar = () => {
           ) : (
             <ChevronRight className="h-4 w-4" />
           )}
-        </Button>
+        </Button> */}
       </div>
 
       {/* Chat Content */}

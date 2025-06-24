@@ -15,6 +15,7 @@ import { useAccessibility } from '@/contexts/AccessibilityContext';
 import 'leaflet/dist/leaflet.css';
 import DashV4 from '@/components/DashboardVfour';
 import DashV3 from '@/components/DashboardVthree';
+import { ChatInterface } from '@/components/ChatInterface';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -162,8 +163,13 @@ const Index = () => {
               </div>
             )}
           </div>
-
-          
+          {/* <div className="bg-background border-t border-border p-1 schemes-section">
+            <SchemesList 
+              schemes={schemes}
+              selectedScheme={selectedIndicator}
+              onSchemeSelect={setSelectedIndicator}
+            />
+          </div> */}
         </div>
       </div>
 
