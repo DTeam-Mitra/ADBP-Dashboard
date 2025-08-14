@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { Button } from '@/components/ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { THEMES } from '@/utils/csvParser';
+import { useAccessibility } from '@/contexts/AccessibilityContext';
 
 interface BlockType {
   sno: number;
@@ -20,6 +21,7 @@ interface BlocksV2Props {
 export const BlocksV2: React.FC<BlocksV2Props> = ({ data, baselineData, rankingMap }) => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('All Districts');
   const [selectedBlockSno, setSelectedBlockSno] = useState<string>('All Blocks');
+  const { fontSize, isDarkMode } = useAccessibility();
 
   const districts = useMemo<string[]>(
     () => ['All Districts', ...Array.from(new Set(data.map(d => d.districtName)))],
@@ -108,6 +110,7 @@ const BlocksGridV2: React.FC<BlocksGridV2Props> = ({ data, onBlockSelect, rankin
   };
 
   const getSvgPath = (blockName: string) => `/Block Image/${blockName.replace(/[^\w\s-]/g, '')}.svg`;
+  const { isDarkMode } = useAccessibility();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -124,7 +127,7 @@ const BlocksGridV2: React.FC<BlocksGridV2Props> = ({ data, onBlockSelect, rankin
               <img
                 src={imgSrc}
                 alt={block.blockName}
-                className="max-w-20 max-h-20 object-contain flex-shrink-0"
+                className={`max-w-20 max-h-20 object-contain flex-shrink-0 ${isDarkMode ? 'brightness-0 invert' : ''}`}
                 onError={e => (e.currentTarget.style.display = 'none')}
               />
               <div>
@@ -156,6 +159,7 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
     [baseline, block.sno]
   );
   const [comparisonSno, setComparisonSno] = useState<string>('');
+  const { isDarkMode } = useAccessibility();
   const comparisonBlock = useMemo(
   () => comparisonSno === 'none'
     ? null
@@ -168,7 +172,8 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
   return (
     <Card>
       {/* Custom header replacing CardHeader */}
-      <div className="flex justify-between items-center p-6 bg-white shadow-sm rounded-t-lg">
+      <div className={`flex justify-between items-center p-6 ${isDarkMode ? 'bg-[rgb(3,14,38)] border-white' : ''} bg-white shadow-sm rounded-t-lg border-gray`}>
+
         <Button onClick={onBack} variant="outline">← Back</Button>
         <div className="flex items-center space-x-4">
           <div className="text-right">
@@ -178,9 +183,10 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
           <img
             src={imgSrc}
             alt={block.blockName}
-            className="w-20 h-20"
+            className={`w-20 h-20 ${isDarkMode ? 'brightness-0 invert' : ''}`}
             onError={e => (e.currentTarget.style.display = 'none')}
           />
+
         </div>
       </div>
       <CardContent className="p-6">
@@ -216,9 +222,9 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
                 <col />
                 <col />
                 {comparisonBlock && <col />}
-                <col />
+                {/* <col /> */}
               </colgroup>
-              <thead className="bg-gray-50">
+              <thead className={`${isDarkMode ? 'bg-[rgb(3,14,38)]' : 'bg-gray-100'} border-none`}>
                 <tr>
                   <th className="px-4 py-2 text-left">Indicator</th>
                   <th className="px-4 py-2 text-center">Baseline Data</th>
@@ -226,10 +232,10 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
                   {comparisonBlock && (
                     <th className="px-4 py-2 text-center">{comparisonBlock.blockName}</th>
                   )}
-                  <th className="px-4 py-2 text-center">Remarks</th>
+                  {/* <th className="px-4 py-2 text-center">Remarks</th> */}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className={`divide-y ${isDarkMode ? 'divide-[rgba(2, 7, 19, 1)]' : 'divide-gray-100'}`}>
                 {Object.keys(THEMES[themeKey].indicators).map(indicatorKey => (
                   <tr key={indicatorKey}>
                     <td className="px-4 py-2 ">{THEMES[themeKey].indicators[indicatorKey]}</td>
@@ -242,9 +248,9 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
                         {comparisonBlock[themeKey]?.[indicatorKey] != null ? `${comparisonBlock[themeKey][indicatorKey]}%` : 'N/A'}
                       </td>
                     )}
-                    <td>
+                    {/* <td>
 
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

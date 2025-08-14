@@ -1,3 +1,5 @@
+import { useAccessibility } from "@/contexts/AccessibilityContext";
+import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { CSVData } from "@/utils/csvParser";
@@ -13,6 +15,7 @@ export const RankingView: React.FC<RankingViewProps> = ({
   rankingMap,
   previousRankingMap
 }) => {
+  const { fontSize, isDarkMode } = useAccessibility();
   return (
     <Card>
       <CardHeader>
@@ -23,7 +26,11 @@ export const RankingView: React.FC<RankingViewProps> = ({
       </CardHeader>
       <CardContent>
         <Table>
-          <TableHeader className="bg-gray-100">
+          <TableHeader  style={isDarkMode
+    ? { backgroundColor: 'rgb(3, 14, 38)', borderColor: 'white' }
+    : { backgroundColor: '#f3f4f6', borderColor: 'gray' }}
+>
+
             <TableRow>
               <TableHead>Rank</TableHead>
               <TableHead>Change</TableHead>

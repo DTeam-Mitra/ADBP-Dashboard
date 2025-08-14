@@ -40,7 +40,7 @@ const BarHorizontal: React.FC<BarHorizontalProps> = ({ current, previous, baseli
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative w-full bg-slate-100 rounded"
+      className="relative w-full  rounded "
       style={{
         height: containerHeight,
         overflow: 'hidden',
@@ -50,7 +50,7 @@ const BarHorizontal: React.FC<BarHorizontalProps> = ({ current, previous, baseli
       {/* baseline */}
       {hovered && (
         <div
-          className="absolute left-0 rounded"
+          className="absolute left-0 rounded "
           style={{
             width: `${toPct(baseline)}%`,
             height: barHeight,
@@ -280,7 +280,7 @@ export const IndicatorV2 = ({
                 ({indicatorData.worst.currVal}%)
               </div>
               <div>
-                <span className="rounded bg-slate-200 px-2 py-1 text-xs font-medium">
+                <span className="rounded px-2 py-1 text-xs font-medium">
                   SDG: {meta.sdg}
                 </span>
               </div>
@@ -323,7 +323,7 @@ export const IndicatorV2 = ({
                   size="sm"
                   onClick={() => setShowTechniques(!showTechniques)}
                 >
-                  How to improve?
+                  Interventions:
                   {showTechniques ? <CaretUpIcon /> : <CaretDownIcon />}
                 </Button>
                 {showTechniques && (

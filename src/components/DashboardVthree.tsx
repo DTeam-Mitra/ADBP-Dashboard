@@ -2,9 +2,10 @@ import { useState, useEffect, useMemo } from 'react';
 
 // --- UI Component Imports ---
 import { Button } from '@/components/ui/button';
+import { Navbar } from '@/components/Navbar';
 
 // Child Components Imports
-import { BlockDetailView, BlocksView } from './Blocks';
+import { BlockDetailView, BlocksView } from './deprecated/Blocks';
 //import { IndicatorsView } from './Indicators';
 import { IndicatorV2 } from './IndicatorsV2';
 import { BlocksV2 } from './BlocksV2';
@@ -167,6 +168,20 @@ const previousRankingMap = useMemo(() => {
 
         {renderContent()}
       </div>
+      {/* Citation in bottom right */}
+      <div
+      className="
+        fixed bottom-1 right-2
+        text-gray-400 text-xs
+        opacity-50 hover:opacity-80
+        pr-2
+        pointer-events-none
+        z-50
+        transition-opacity duration-300
+      "
+    >
+      2025, Himanshu C
+    </div>
     </div>
   );
 };

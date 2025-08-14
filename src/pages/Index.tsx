@@ -145,7 +145,7 @@ const Index = () => {
               )}
 
               {activeTab === 'insights' && (
-                <div className="absolute inset-0 p-4 tabs-content">
+                <div className="absolute inset-0 tabs-content">
                   <div className="h-full overflow-auto">
                     <DashV3/>
                   </div>
