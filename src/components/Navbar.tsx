@@ -20,7 +20,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold tracking-tight">
-              <span className="text-[hsl(var(--primary-foreground))]">MITRA </span>
+              <span className="text-[hsl(var(--primary-foreground))]">Himan </span>
               <span className="text-[hsl(var(--accent))]">Dashboard</span>
             </h1>
           </div>

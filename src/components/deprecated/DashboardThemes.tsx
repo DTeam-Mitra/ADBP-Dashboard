@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { DataTable } from './DataTable';
+import { DataTable } from '../DataTable';
 import { parseCSVData, CSVData } from '@/utils/csvParser';
 
 interface ThemeData {
@@ -34,7 +34,7 @@ export const DashboardThemes: React.FC<DashboardThemesProps> = ({ onThemeSelect 
 
   const loadCSVData = async () => {
     try {
-      const response = await fetch('/src/database/Dashboard Data.csv');
+      const response = await fetch('/src/database/Mar2024.csv');
       const csvText = await response.text();
       const parsedData = parseCSVData(csvText);
       setCSVData(parsedData);

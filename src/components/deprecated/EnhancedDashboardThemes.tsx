@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { TrendingUp, TrendingDown, Search, Filter } from 'lucide-react';
 import { IndicatorCards } from './IndicatorCards';
 import { parseCSVData, CSVData } from '@/utils/csvParser';
-import { MaharashtraMap } from './MaharashtraMap';
-import { DistrictMap } from './DistrictMap';
+import { MaharashtraMap } from '../MaharashtraMap';
+import { DistrictMap } from '../DistrictMap';
 
 // Top level navigation
 const LEVEL_TABS = ['State', 'District'];
@@ -62,7 +62,7 @@ export const EnhancedDashboardThemes: React.FC = () => {
 
   const loadCSVData = async () => {
     try {
-      const response = await fetch('/src/database/Dashboard Data.csv');
+      const response = await fetch('/src/database/Mar2024.csv');
       const csvText = await response.text();
       const parsedData = parseCSVData(csvText);
       setCSVData(parsedData);

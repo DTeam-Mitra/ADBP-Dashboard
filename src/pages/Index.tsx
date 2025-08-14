@@ -10,10 +10,10 @@ import { MapTooltip } from '@/components/MapTooltip';
 import { CollapsibleChatSidebar } from '@/components/CollapsibleChatSidebar';
 import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
-import { EnhancedDashboardThemes } from '@/components/EnhancedDashboardThemes';
+import { EnhancedDashboardThemes } from '@/components/deprecated/EnhancedDashboardThemes';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import 'leaflet/dist/leaflet.css';
-import DashV4 from '@/components/DashboardVfour';
+import DashV4 from '@/components/deprecated/DashboardVfour';
 import DashV3 from '@/components/DashboardVthree';
 import { ChatInterface } from '@/components/ChatInterface';
 
@@ -88,7 +88,7 @@ const Index = () => {
       <div className="pt-16 h-screen flex main-content">
         
         {/* Left Sidebar - Collapsible Chatbot */}
-        <CollapsibleChatSidebar />
+        {/* <CollapsibleChatSidebar /> */}
 
         {/* Main Content Area - Dynamically Expand */}
         <div className="flex-1 flex flex-col min-w-0">
