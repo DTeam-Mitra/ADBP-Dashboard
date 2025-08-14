@@ -1,19 +1,11 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState} from 'react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { InteractiveMap } from '@/components/InteractiveMap';
-import { MapTooltip } from '@/components/MapTooltip';
-import { CollapsibleChatSidebar } from '@/components/CollapsibleChatSidebar';
-import { SchemesList } from '@/components/SchemesList';
 import { MapLayerControls } from '@/components/MapLayerControls';
-import { EnhancedDashboardThemes } from '@/components/deprecated/EnhancedDashboardThemes';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import 'leaflet/dist/leaflet.css';
-import DashV4 from '@/components/deprecated/DashboardVfour';
 import DashV3 from '@/components/DashboardVthree';
 import { ChatInterface } from '@/components/ChatInterface';
 
