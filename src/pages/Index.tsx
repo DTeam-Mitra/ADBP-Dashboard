@@ -7,7 +7,7 @@ import { MapLayerControls } from '@/components/MapLayerControls';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
 import 'leaflet/dist/leaflet.css';
 import DashV3 from '@/components/DashboardVthree';
-import { ChatInterface } from '@/components/ChatInterface';
+import { DashboardFooter } from '@/components/Footer';
 
 const Index = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -140,6 +140,7 @@ const Index = () => {
                 <div className="absolute inset-0 tabs-content">
                   <div className="h-full overflow-auto">
                     <DashV3/>
+                    <DashboardFooter />
                   </div>
                 </div>
               )}

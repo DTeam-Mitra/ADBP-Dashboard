@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 
 // --- UI Component Imports ---
 import { Button } from '@/components/ui/button';
-import { Navbar } from '@/components/Navbar';
 
 // Child Components Imports
 import { BlockDetailView, BlocksView } from './deprecated/Blocks';
@@ -119,7 +118,7 @@ const previousRankingMap = useMemo(() => {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header className="mb-6">
+        <header className="mb-6 shadow-sm p-4 rounded-md">
           <h1 className="text-3xl font-bold tracking-tight text-[hsl(var(--primary))]">
             Aspirational Blocks Dashboard
           </h1>
@@ -133,10 +132,10 @@ const previousRankingMap = useMemo(() => {
             <Button
               variant="ghost"
               onClick={() => { setActiveTab('indicator'); setSelectedBlock(null); }}
-              className={`pb-3 rounded-none ${
+              className={`pb-3 rounded-none transition-colors ${
                 activeTab === 'indicator'
-                  ? 'border-b-2 border-primary text-primary'
-                  : 'text-muted-foreground'
+                  ? 'border-b-2 border-primary text-primary font-semibold bg-[#ffffff]'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Indicators
@@ -144,10 +143,10 @@ const previousRankingMap = useMemo(() => {
             <Button
               variant="ghost"
               onClick={() => setActiveTab('blocks')}
-              className={`pb-3 rounded-none ${
+              className={`pb-3 rounded-none transition-colors ${
                 activeTab === 'blocks'
-                  ? 'border-b-2 border-primary text-primary'
-                  : 'text-muted-foreground'
+                  ? 'border-b-2 border-primary text-primary font-semibold bg-[#ffffff]'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Block Profile
@@ -155,10 +154,10 @@ const previousRankingMap = useMemo(() => {
             <Button
               variant="ghost"
               onClick={() => { setActiveTab('ranking'); setSelectedBlock(null); }}
-              className={`pb-3 rounded-none ${
+              className={`pb-3 rounded-none transition-colors ${
                 activeTab === 'ranking'
-                  ? 'border-b-2 border-primary text-primary'
-                  : 'text-muted-foreground'
+                  ? 'border-b-2 border-primary text-primary font-semibold bg-[#ffffff]'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Ranking
