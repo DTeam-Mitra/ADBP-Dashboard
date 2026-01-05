@@ -126,12 +126,12 @@ export const IndicatorV2 = ({
   const [showTechniques, setShowTechniques] = useState(false);
 
   const indicatorList = useMemo(
-    () => Object.keys(THEMES[selectedTheme]?.indicators || {}),
+    () => Object.keys(THEMES[selectedTheme]?.indicators || {'lowBirthWeight': 'ancRegistration'}),
     [selectedTheme]
   );
 
-  const greenDate = 'March 2025';
-  const yellowDate = 'December 2024';
+  const greenDate = 'June 2025';
+  const yellowDate = 'March 2025';
   const redDate = 'March 2023';
 
   /* ---------- Data crunch ---------- */

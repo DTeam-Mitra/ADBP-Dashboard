@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { THEMES } from '@/utils/csvParser';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
+import { generateBlockReport } from '@/utils/generateBlockReport';
 
 interface BlockType {
   sno: number;
@@ -77,6 +78,7 @@ export const BlocksV2: React.FC<BlocksV2Props> = ({ data, baselineData, rankingM
           baseline={baselineData}
           allBlocks={filteredByDistrict}
           onBack={() => setSelectedBlockSno('All Blocks')}
+          rankingMap={rankingMap}
         />
       ) : (
         <BlocksGridV2
@@ -151,9 +153,10 @@ interface BlockDetailViewV2Props {
   baseline: BlockType[];
   allBlocks: BlockType[];
   onBack: () => void;
+  rankingMap: Record<number, any>;
 }
 
-const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, allBlocks, onBack }) => {
+const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, allBlocks, onBack, rankingMap }) => {
   const baselineRecord = useMemo(
     () => baseline.find(b => b.sno === block.sno) || ({} as BlockType),
     [baseline, block.sno]
@@ -186,7 +189,12 @@ const BlockDetailViewV2: React.FC<BlockDetailViewV2Props> = ({ block, baseline, 
             className={`w-20 h-20 ${isDarkMode ? 'brightness-0 invert' : ''}`}
             onError={e => (e.currentTarget.style.display = 'none')}
           />
-
+          <Button
+            onClick={() => generateBlockReport(block, rankingMap)}
+            variant="default"
+          >
+            Download Report
+          </Button>
         </div>
       </div>
       <CardContent className="p-6">

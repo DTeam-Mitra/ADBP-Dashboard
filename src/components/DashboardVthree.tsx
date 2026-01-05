@@ -9,6 +9,7 @@ import { BlockDetailView, BlocksView } from './deprecated/Blocks';
 import { IndicatorV2 } from './IndicatorsV2';
 import { BlocksV2 } from './BlocksV2';
 import { RankingView } from './Ranking';
+import { BlockReport } from './BlockReport';
 import { parseCSVData, CSVData } from '@/utils/csvParser';
 
 // import CSV files as raw text
@@ -17,7 +18,7 @@ import PreviousQuarterrawData   from '../database/prevdata.csv?raw';
 import BaselinerawData          from '../database/basedata.csv?raw';
 
 export const DashV3 = () => {
-  const [activeTab, setActiveTab]                     = useState<'indicator'|'blocks'|'ranking'>('indicator');
+  const [activeTab, setActiveTab]                     = useState<'indicator'|'blocks'|'ranking'|'report'>('indicator');
   const [dashboardData, setDashboardData]             = useState<CSVData[]>([]);
   const [previousQuarterData, setPreviousQuarterData] = useState<CSVData[]>([]);
   const [baselineData, setBaselineData]               = useState<CSVData[]>([]);
@@ -112,6 +113,13 @@ const previousRankingMap = useMemo(() => {
         return <RankingView data={rankedData} rankingMap={rankingMap} previousRankingMap={previousRankingMap}/>;
       default:
         return null;
+      case 'report':
+        return (
+          <BlockReport
+            data={dashboardData}
+            rankingMap={rankingMap}
+          />
+        );
     }
   };
 
@@ -161,6 +169,17 @@ const previousRankingMap = useMemo(() => {
               }`}
             >
               Ranking
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => { setActiveTab('report'); setSelectedBlock(null); }}
+              className={`pb-3 rounded-none transition-colors ${
+                activeTab === 'report'
+                  ? 'border-b-2 border-primary text-primary font-semibold bg-[#ffffff]'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Report
             </Button>
           </div>
         </nav>
